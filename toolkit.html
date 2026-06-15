@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ToolKit</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0d1117; color: #c9d1d9;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    height: 100dvh; display: flex; flex-direction: column;
+    overflow: hidden; color-scheme: dark;
+    position: fixed; width: 100%; top: 0; left: 0;
+  }
+  .page { display: none; flex: 1; flex-direction: column; overflow: hidden; height: 100%; }
+  .page.active { display: flex; }
+
+  .topnav {
+    background: #010409; border-bottom: 1px solid #30363d;
+    padding: 0 12px; height: 48px;
+    display: flex; align-items: center; flex-shrink: 0; gap: 8px;
+  }
+  .topnav-logo { font-size: 15px; font-weight: 700; color: #58a6ff !important; -webkit-text-fill-color: #58a6ff !important; flex: 1; }
+  .topnav-logo span { color: #79c0ff !important; -webkit-text-fill-color: #79c0ff !important; }
+  .nav-btn {
+    background: transparent !important; border: none;
+    color: #8b949e !important; -webkit-text-fill-color: #8b949e !important;
+    cursor: pointer; padding: 6px 8px; border-radius: 6px;
+    line-height: 1; -webkit-appearance: none; font-size: 18px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .nav-btn:hover { background: #21262d !important; color: #c9d1d9 !important; -webkit-text-fill-color: #c9d1d9 !important; }
+
+  .dots-grid {
+    display: grid; grid-template-columns: repeat(3,6px); gap: 3px;
+    padding: 8px; cursor: pointer; border-radius: 6px; transition: background 0.15s;
+  }
+  .dots-grid:hover { background: #21262d !important; }
+  .dots-grid span { width: 6px; height: 6px; border-radius: 50%; background: #8b949e !important; display: block; }
+  .dots-grid:hover span { background: #c9d1d9 !important; }
+
+  /* RIGHT DRAWER */
+  .drawer-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 100; }
+  .drawer-backdrop.open { display: block; }
+  .right-drawer {
+    position: fixed; top: 0; right: 0; bottom: 0; width: 240px;
+    background: #161b22; border-left: 1px solid #30363d;
+    z-index: 101; transform: translateX(100%); transition: transform 0.25s ease;
+    display: flex; flex-direction: column; overflow: hidden;
+  }
+  .right-drawer.open { transform: translateX(0); }
+  .drawer-header {
+    padding: 14px 16px; border-bottom: 1px solid #30363d; font-size: 14px; font-weight: 700;
+    color: #e6edf3 !important; -webkit-text-fill-color: #e6edf3 !important;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .drawer-close { background: transparent !important; border: none; color: #8b949e !important; -webkit-text-fill-color: #8b949e !important; font-size: 18px; cursor: pointer; padding: 2px 6px; border-radius: 4px; -webkit-appearance: none; }
+  .drawer-section-title { font-size: 10px; font-weight: 700; letter-spacing: 1px; color: #484f58 !important; -webkit-text-fill-color: #484f58 !important; text-transform: uppercase; padding: 12px 16px 6px; }
+  .drawer-item { display: flex; align-items: center; gap: 10px; padding: 11px 16px; cursor: pointer; border: none; background: transparent !important; width: 100%; text-align: left; -webkit-appearance: none; transition: background 0.12s; }
+  .drawer-item:hover { background: #21262d !important; }
+  .drawer-item-icon { font-size: 18px; width: 24px; text-align: center; }
+  .drawer-item-text { font-size: 13px; font-weight: 500; color: #c9d1d9 !important; -webkit-text-fill-color: #c9d1d9 !important; }
+  .drawer-item-sub { font-size: 11px; color: #484f58 !important; -webkit-text-fill-color: #484f58 !important; margin-top: 1px; }
+  .drawer-item.active-tool { background: #1f3a5f !important; border-left: 3px solid #58a6ff; }
+  .drawer-divider { height: 1px; background: #21262d; margin: 4px 0; }
+
+  /* HOME */
+  .home-body { flex: 1; overflow-y: auto; padding: 20px 14px 30px; background: #0d1117; }
+  .home-greeting h1 { font-size: 20px; font-weight: 700; color: #e6edf3 !important; -webkit-text-fill-color: #e6edf3 !important; margin-bottom: 4px; }
+  .home-greeting p { font-size: 13px; color: #8b949e !important; -webkit-text-fill-color: #8b949e !important; }
+  .section-title { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #484f58 !important; -webkit-text-fill-color: #484f58 !important; margin-bottom: 10px; margin-top: 20px; }
+  .cards-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .tool-card { background: #161b22 !important; border: 1px solid #30363d; border-radius: 12px; padding: 16px 14px; cursor: pointer; transition: all 0.18s; display: flex; flex-direction: column; gap: 8px; -webkit-appearance: none; text-align: left; }
+  .tool-card:hover { background: #1c2128 !important; border-color: #58a6ff; }
+  .tool-card-icon { font-size: 28px; }
+  .tool-card-name { font-size: 13px; font-weight: 700; color: #e6edf3 !important; -webkit-text-fill-color: #e6edf3 !important; }
+  .tool-card-desc { font-size: 11px; line-height: 1.5; color: #8b949e !important; -webkit-text-fill-color: #8b949e !important; }
+  .tool-card-tag { display: inline-block; background: #21262d !important; border: 1px solid #30363d; border-radius: 20px; padding: 2px 8px; font-size: 10px; color: #58a6ff !important; -webkit-text-fill-color: #58a6ff !important; font-weight: 600; margin-top: auto; width: fit-content; }
+  .tool-card.soon { opacity: 0.5; cursor: default; pointer-events: none; }
+  .tool-card-tag.soon-tag { color: #484f58 !important; -webkit-text-fill-color: #484f58 !important; }
+
+  /* CODE EDITOR */
+  .editor-header { background: #161b22; border-bottom: 1px solid #30363d; padding: 8px 12px; display: flex; align-items: center; gap: 8px; flex-shrink: 0; flex-wrap: wrap; }
+  .filename-input, .format-select { background: #0d1117 !important; border: 1px solid #30363d; color: #c9d1d9 !important; -webkit-text-fill-color: #c9d1d9 !important; padding: 6px 10px; border-radius: 6px; font-size: 12px; outline: none; -webkit-appearance: none; }
+  .filename-input { width: 120px; }
+  .format-select { cursor: pointer; }
+  .editor-header-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+  .btn { padding: 6px 11px; border-radius: 6px; font-size: 12px; font-weight: 500; cursor: pointer; border: none; display: flex; align-items: center; gap: 4px; -webkit-appearance: none; }
+  .btn-primary { background: #238636 !important; color: #fff !important; -webkit-text-fill-color: #fff !important; }
+  .btn-secondary { background: #21262d !important; color: #c9d1d9 !important; -webkit-text-fill-color: #c9d1d9 !important; border: 1px solid #30363d; }
+  .btn-danger { background: #21262d !important; color: #f85149 !important; -webkit-text-fill-color: #f85149 !important; border: 1px solid #30363d; }
+  .btn-paste { background: #21262d !important; color: #79c0ff !important; -webkit-text-fill-color: #79c0ff !important; border: 1px solid #30363d; }
+  .toolbar { background: #161b22; border-bottom: 1px solid #30363d; padding: 5px 12px; display: flex; align-items: center; gap: 5px; flex-shrink: 0; flex-wrap: wrap; }
+  .tool-btn { background: transparent !important; border: 1px solid transparent; color: #8b949e !important; -webkit-text-fill-color: #8b949e !important; padding: 4px 7px; border-radius: 4px; font-size: 12px; cursor: pointer; -webkit-appearance: none; }
+  .tool-btn:hover { background: #21262d !important; color: #c9d1d9 !important; -webkit-text-fill-color: #c9d1d9 !important; }
+  .tool-separator { width: 1px; height: 16px; background: #30363d; margin: 0 3px; }
+  .line-count { margin-left: auto; font-size: 11px; color: #484f58 !important; -webkit-text-fill-color: #484f58 !important; }
+  .find-bar { background: #161b22; border-bottom: 1px solid #30363d; padding: 6px 12px; display: none; align-items: center; gap: 8px; flex-shrink: 0; }
+  .find-bar.visible { display: flex; }
+  .find-bar input { background: #0d1117 !important; border: 1px solid #30363d; color: #c9d1d9 !important; -webkit-text-fill-color: #c9d1d9 !important; padding: 5px 10px; border-radius: 5px; font-size: 13px; outline: none; width: 180px; }
+  .find-info { font-size: 12px; color: #8b949e !important; -webkit-text-fill-color: #8b949e !important; }
+  .editor-container { flex: 1; display: flex; overflow: hidden; min-height: 0; }
+  .line-numbers { background: #0d1117; color: #484f58 !important; font-family: 'Cascadia Code','Fira Code','Consolas',monospace; font-size: 14px; line-height: 1.6; padding: 16px 8px 16px 12px; text-align: right; user-select: none; min-width: 46px; overflow: hidden; border-right: 1px solid #21262d; flex-shrink: 0; }
+  .editor-wrapper { flex: 1; overflow: hidden; }
+  #code-editor { width: 100%; height: 100%; background: #0d1117 !important; color: #c9d1d9 !important; -webkit-text-fill-color: #c9d1d9 !important; border: none; outline: none; resize: none; font-family: 'Cascadia Code','Fira Code','Consolas',monospace; font-size: 14px; line-height: 1.6; padding: 16px; tab-size: 2; white-space: pre; overflow-wrap: normal; overflow-x: auto; overflow-y: auto; caret-color: #58a6ff; }
+  .statusbar { background: #161b22; border-top: 1px solid #30363d; padding: 3px 12px; display: flex; align-items: center; gap: 12px; font-size: 11px; flex-shrink: 0; }
+  .status-item { display: flex; align-items: center; gap: 4px; color: #484f58 !important; -webkit-text-fill-color: #484f58 !important; }
+  .status-dot { width: 6px; height: 6px; border-radius: 50%; background: #3fb950; flex-shrink: 0; }
+
+  /* CONVERSATION VIEWER */
+  .cv-layout { flex: 1; display: flex; overflow: hidden; position: relative; min-height: 0; }
+  .cv-backdrop { display: none; position: absolute; inset: 0; background: rgba(0,0,0,0.55); z-index: 10; }
+  .cv-backdrop.open { display: block; }
+  .cv-sidebar { position: absolute; top: 0; left: 0; bottom: 0; width: 270px; background: #161b22; border-right: 1px solid #30363d; display: flex; flex-direction: column; z-index: 20; transform: translateX(-100%); transition: transform 0.25s ease; overflow: hidden; }
+  .cv-sidebar.open { transform: translateX(0); }
+  .cv-sidebar-top { padding: 10px; border-bottom: 1px solid #30363d; display: flex; flex-direction: column; gap: 8px; flex-shrink: 0; }
+  .cv-upload-btn { background: #238636 !important; color: #fff !important; -webkit-text-fill-color: #fff !important; border: none; border-radius: 6px; padding: 8px 10px; font-size: 12px; cursor: pointer; text-align: center; -webkit-appearance: none; width: 100%; }
+  #cv-file-input { display: none; }
+  .cv-search { background: #0d1117 !important; border: 1px solid #30363d; color: #c9d1d9 !important; -webkit-text-fill-color: #c9d1d9 !important; padding: 7px 10px; border-radius: 6px; font-size: 12px; outline: none; width: 100%; }
+  .cv-stats { font-size: 11px; color: #484f58 !important; -webkit-text-fill-color: #484f58 !important; padding: 5px 10px; border-bottom: 1px solid #30363d; flex-shrink: 0; }
+  .cv-list { flex: 1; overflow-y: auto; padding: 4px; }
+  .cv-item { padding: 8px; border-radius: 6px; cursor: pointer; transition: background 0.12s; margin-bottom: 2px; }
+  .cv-item:hover { background: #21262d; }
+  .cv-item.active { background: #1f3a5f; border: 1px solid #388bfd44; }
+  .cv-item-title { font-size: 12px; font-weight: 500; color: #c9d1d9 !important; -webkit-text-fill-color: #c9d1d9 !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cv-item-meta { font-size: 10px; color: #484f58 !important; -webkit-text-fill-color: #484f58 !important; margin-top: 2px; }
+  .cv-empty { padding: 20px 10px; text-align: center; color: #484f58 !important; -webkit-text-fill-color: #484f58 !important; font-size: 12px; line-height: 1.6; }
+  .cv-main { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
+  .cv-topbar { background: #161b22; border-bottom: 1px solid #30363d; padding: 10px 14px; display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+  .cv-conv-title { font-size: 13px; font-weight: 600; color: #e6edf3 !important; -webkit-text-fill-color: #e6edf3 !important; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cv-conv-meta { font-size: 11px; color: #484f58 !important; -webkit-text-fill-color: #484f58 !important; white-space: nowrap; }
+  .cv-messages { flex: 1; overflow-y: auto; padding: 16px 14px; display: flex; flex-direction: column; gap: 14px; background: #0d1117; }
+  .cv-welcome { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; text-align: center; padding: 24px; }
+  .cv-welcome-icon { font-size: 40px; }
+  .cv-welcome h2 { font-size: 16px; color: #8b949e !important; -webkit-text-fill-color: #8b949e !important; font-weight: 500; }
+  .cv-welcome p { font-size: 12px; line-height: 1.6; max-width: 260px; color: #484f58 !important; -webkit-text-fill-color: #484f58 !important; }
+  .cv-welcome-hint { margin-top: 8px; background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 10px 14px; font-size: 12px; color: #8b949e !important; -webkit-text-fill-color: #8b949e !important; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+  .cv-welcome-hint:hover { background: #1c2128 !important; border-color: #58a6ff; }
+  .msg-bubble { max-width: min(85%,560px); padding: 11px 14px; border-radius: 12px; font-size: 13px; line-height: 1.7; word-wrap: break-word; word-break: break-word; }
+  .msg-human { align-self: flex-end; background-color: #1f3a5f !important; border: 1px solid #388bfd55; color: #cdd9e5 !important; -webkit-text-fill-color: #cdd9e5 !important; border-bottom-right-radius: 4px; }
+  .msg-assistant { align-self: flex-start; background-color: #1c2128 !important; border: 1px solid #30363d; color: #e6edf3 !important; -webkit-text-fill-color: #e6edf3 !important; border-bottom-left-radius: 4px; }
+  .msg-role { font-size: 10px; font-weight: 700; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.6px; }
+  .msg-human .msg-role { color: #79c0ff !important; -webkit-text-fill-color: #79c0ff !important; }
+  .msg-assistant .msg-role { color: #56d364 !important; -webkit-text-fill-color: #56d364 !important; }
+  .msg-text { color: inherit !important; -webkit-text-fill-color: inherit !important; }
+  .msg-text pre { background-color: #0d1117 !important; border: 1px solid #30363d; border-radius: 6px; padding: 10px 12px; overflow-x: auto; font-size: 12px; margin: 8px 0; white-space: pre-wrap; font-family: 'Cascadia Code','Fira Code','Consolas',monospace; color: #c9d1d9 !important; -webkit-text-fill-color: #c9d1d9 !important; }
+  .msg-text code { background-color: #0d1117 !important; padding: 1px 5px; border-radius: 3px; font-size: 12px; font-family: monospace; color: #79c0ff !important; -webkit-text-fill-color: #79c0ff !important; }
+  .highlight { background: #f0e040 !important; color: #000 !important; -webkit-text-fill-color: #000 !important; border-radius: 2px; }
+
+  /* NOTE PAD */
+  .note-layout { flex: 1; display: flex; overflow: hidden; min-height: 0; position: relative; }
+  .note-main { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
+  .note-toolbar { background: #161b22; border-bottom: 1px solid #30363d; padding: 6px 12px; display: flex; align-items: center; gap: 4px; flex-shrink: 0; flex-wrap: wrap; }
+  .note-tool-btn { background: transparent !important; border: 1px solid transparent; color: #8b949e !important; -webkit-text-fill-color: #8b949e !important; padding: 5px 9px; border-radius: 5px; font-size: 13px; cursor: pointer; -webkit-appearance: none; font-weight: 600; transition: all 0.12s; }
+  .note-tool-btn:hover { background: #21262d !important; color: #c9d1d9 !important; -webkit-text-fill-color: #c9d1d9 !important; }
+  .note-tool-btn.active { background: #2d1b1a !important; color: #f85149 !important; -webkit-text-fill-color: #f85149 !important; border-color: #6e4040; }
+  .note-sep { width: 1px; height: 18px; background: #30363d; margin: 0 2px; flex-shrink: 0; }
+  .note-title-bar { background: #0d1117; border-bottom: 1px solid #21262d; padding: 10px 16px; flex-shrink: 0; }
+  .note-title-input { background: transparent !important; border: none; outline: none; color: #e6edf3 !important; -webkit-text-fill-color: #e6edf3 !important; font-size: 18px; font-weight: 700; width: 100%; caret-color: #58a6ff; }
+  .note-title-input::placeholder { color: #484f58 !important; -webkit-text-fill-color: #484f58 !important; }
+  .note-editor-area { flex: 1; overflow-y: auto; background: #0d1117; padding: 16px; }
+  .note-editor { outline: none; min-height: 100%; font-size: 14px; line-height: 1.8; color: #c9d1d9 !important; -webkit-text-fill-color: #c9d1d9 !important; caret-color: #58a6ff; }
+  .note-statusbar { background: #161b22; border-top: 1px solid #30363d; padding: 4px 14px; display: flex; align-items: center; gap: 14px; font-size: 11px; flex-shrink: 0; }
+  .note-stat { color: #484f58 !important; -webkit-text-fill-color: #484f58 !important; }
+  .note-empty { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #484f58; gap: 12px; text-align: center; padding: 24px; }
+  .note-empty-icon { font-size: 40px; }
+  .note-empty h2 { font-size: 16px; color: #8b949e !important; -webkit-text-fill-color: #8b949e !important; font-weight: 500; }
+  .note-empty p { font-size: 12px; color: #484f58 !important; -webkit-text-fill-color: #484f58 !important; }
+
+  /* TOAST */
+  .toast { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%) translateY(20px); background: #238636 !important; color: #fff !important; -webkit-text-fill-color: #fff !important; padding: 10px 20px; border-radius: 8px; font-size: 13px; opacity: 0; transition: all 0.3s; pointer-events: none; z-index: 999; white-space: nowrap; }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: #0d1117; }
+  ::-webkit-scrollbar-thumb { background: #30363d; border-radius: 4px; }
+</style>
+</head>
+<body>
+
+<!-- RIGHT DRAWER -->
+<div class="drawer-backdrop" id="drawerBackdrop" onclick="closeDrawer()"></div>
+<div class="right-drawer" id="rightDrawer">
+  <div class="drawer-header">🧰 ToolKit <button class="drawer-close" onclick="closeDrawer()">✕</button></div>
+  <div class="drawer-section-title">Navigation</div>
+  <button class="drawer-item" onclick="goHome();closeDrawer()">
+    <span class="drawer-item-icon">🏠</span>
+    <div><div class="drawer-item-text">Home</div><div class="drawer-item-sub">সব tools দেখো</div></div>
+  </button>
+  <div class="drawer-divider"></div>
+  <div class="drawer-section-title">Tools</div>
+  <button class="drawer-item" id="di-editor" onclick="showPage('editor');closeDrawer()">
+    <span class="drawer-item-icon">✏️</span>
+    <div><div class="drawer-item-text">Code Editor</div><div class="drawer-item-sub">Code লিখো ও Download করো</div></div>
+  </button>
+  <button class="drawer-item" id="di-viewer" onclick="showPage('viewer');closeDrawer()">
+    <span class="drawer-item-icon">💬</span>
+    <div><div class="drawer-item-text">Conversation Viewer</div><div class="drawer-item-sub">Claude conversation দেখো</div></div>
+  </button>
+  <button class="drawer-item" id="di-notepad" onclick="showPage('notepad');closeDrawer()">
+    <span class="drawer-item-icon">📝</span>
+    <div><div class="drawer-item-text">Note Pad</div><div class="drawer-item-sub">Note লিখো ও সংগঠিত করো</div></div>
+  </button>
+  <div class="drawer-divider"></div>
+  <div class="drawer-section-title">শীঘ্রই আসছে</div>
+  <div class="drawer-item" style="opacity:0.4;cursor:default">
+    <span class="drawer-item-icon">🖼️</span>
+    <div><div class="drawer-item-text">Image Tools</div><div class="drawer-item-sub">Coming soon</div></div>
+  </div>
+</div>
+
+<!-- TEMPLATE MODAL -->
+<div id="templateModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;align-items:center;justify-content:center">
+  <div style="background:#161b22;border:1px solid #30363d;border-radius:14px;padding:20px;width:280px;max-width:90vw">
+    <div style="font-size:15px;font-weight:700;color:#e6edf3;-webkit-text-fill-color:#e6edf3;margin-bottom:14px">📋 Template বেছে নাও</div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <button onclick="applyTemplate('blank')" style="display:flex;align-items:center;gap:12px;background:#0d1117 !important;border:1px solid #30363d;border-radius:10px;padding:14px;cursor:pointer;-webkit-appearance:none;text-align:left;width:100%">
+        <span style="font-size:22px">📄</span>
+        <div><div style="font-size:13px;font-weight:600;color:#c9d1d9;-webkit-text-fill-color:#c9d1d9">Blank</div><div style="font-size:11px;color:#484f58;-webkit-text-fill-color:#484f58;margin-top:2px">খালি note</div></div>
+      </button>
+      <button onclick="applyTemplate('todo')" style="display:flex;align-items:center;gap:12px;background:#0d1117 !important;border:1px solid #30363d;border-radius:10px;padding:14px;cursor:pointer;-webkit-appearance:none;text-align:left;width:100%">
+        <span style="font-size:22px">✅</span>
+        <div><div style="font-size:13px;font-weight:600;color:#c9d1d9;-webkit-text-fill-color:#c9d1d9">Todo List</div><div style="font-size:11px;color:#484f58;-webkit-text-fill-color:#484f58;margin-top:2px">কাজের তালিকা</div></div>
+      </button>
+    </div>
+    <button onclick="closeTemplateModal()" style="margin-top:14px;width:100%;padding:10px;background:#21262d !important;border:1px solid #30363d;border-radius:8px;color:#8b949e;-webkit-text-fill-color:#8b949e;cursor:pointer;font-size:13px;-webkit-appearance:none">বাতিল</button>
+  </div>
+</div>
+
+<!-- NOTE CONTEXT MENU -->
+<div id="noteCtxMenu" style="display:none;position:fixed;z-index:500;background:#161b22;border:1px solid #30363d;border-radius:12px;padding:6px;min-width:160px;box-shadow:0 8px 24px rgba(0,0,0,0.6)">
+  <button onclick="ctxRename()" style="display:flex;align-items:center;gap:10px;width:100%;padding:11px 14px;background:transparent !important;border:none;border-radius:8px;color:#c9d1d9;-webkit-text-fill-color:#c9d1d9;font-size:13px;cursor:pointer;text-align:left">✏️ Rename</button>
+  <button onclick="ctxPin()" id="ctxPinBtn" style="display:flex;align-items:center;gap:10px;width:100%;padding:11px 14px;background:transparent !important;border:none;border-radius:8px;color:#c9d1d9;-webkit-text-fill-color:#c9d1d9;font-size:13px;cursor:pointer;text-align:left">📌 Pin</button>
+  <div style="height:1px;background:#30363d;margin:4px 0"></div>
+  <button onclick="ctxDelete()" style="display:flex;align-items:center;gap:10px;width:100%;padding:11px 14px;background:transparent !important;border:none;border-radius:8px;color:#f85149;-webkit-text-fill-color:#f85149;font-size:13px;cursor:pointer;text-align:left">🗑️ Delete</button>
+</div>
+
+<!-- HOME PAGE -->
+<div class="page active" id="page-home">
+  <div class="topnav">
+    <div class="topnav-logo">Tool<span>Kit</span></div>
+    <button class="nav-btn" style="margin-left:auto" onclick="openDrawer()">☰</button>
+  </div>
+  <div class="home-body">
+    <div class="home-greeting" style="margin-bottom:20px">
+      <h1>👋 স্বাগতম!</h1>
+      <p>নিচের যেকোনো tool বেছে নাও</p>
+    </div>
+    <div class="section-title">⚡ Available Tools</div>
+    <div class="cards-grid">
+      <button class="tool-card" onclick="showPage('editor')">
+        <div class="tool-card-icon">✏️</div>
+        <div class="tool-card-name">Code Editor</div>
+        <div class="tool-card-desc">Code লিখো, edit করো এবং download করো</div>
+        <div class="tool-card-tag">Ready</div>
+      </button>
+      <button class="tool-card" onclick="showPage('viewer')">
+        <div class="tool-card-icon">💬</div>
+        <div class="tool-card-name">Conversation Viewer</div>
+        <div class="tool-card-desc">Claude-এর exported conversation দেখো</div>
+        <div class="tool-card-tag">Ready</div>
+      </button>
+      <button class="tool-card" onclick="showPage('notepad')">
+        <div class="tool-card-icon">📝</div>
+        <div class="tool-card-name">Note Pad</div>
+        <div class="tool-card-desc">Note লিখো, সংগঠিত করো ও save করো</div>
+        <div class="tool-card-tag">Ready</div>
+      </button>
+      <div class="tool-card soon">
+        <div class="tool-card-icon">🖼️</div>
+        <div class="tool-card-name">Image Tools</div>
+        <div class="tool-card-desc">ছবি resize, convert ও edit করো</div>
+        <div class="tool-card-tag soon-tag">Coming Soon</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CODE EDITOR PAGE -->
+<div class="page" id="page-editor">
+  <div class="topnav">
+    <button class="nav-btn" onclick="goHome()">←</button>
+    <div class="topnav-logo">Code<span>Edit</span></div>
+    <button class="nav-btn" style="margin-left:auto" onclick="openDrawer()">☰</button>
+  </div>
+  <div class="editor-header">
+    <input type="text" class="filename-input" id="filename" value="untitled" placeholder="filename">
+    <select class="format-select" id="fileFormat" onchange="onFormatChange()">
+      <option value="txt">Text (.txt)</option><option value="html">HTML (.html)</option>
+      <option value="css">CSS (.css)</option><option value="js">JavaScript (.js)</option>
+      <option value="py">Python (.py)</option><option value="json">JSON (.json)</option>
+      <option value="md">Markdown (.md)</option><option value="xml">XML (.xml)</option>
+      <option value="sql">SQL (.sql)</option><option value="php">PHP (.php)</option>
+      <option value="ts">TypeScript (.ts)</option><option value="jsx">JSX (.jsx)</option>
+      <option value="c">C (.c)</option><option value="cpp">C++ (.cpp)</option>
+      <option value="java">Java (.java)</option><option value="sh">Shell (.sh)</option>
+      <option value="yaml">YAML (.yaml)</option><option value="csv">CSV (.csv)</option>
+    </select>
+    <div class="editor-header-actions">
+      <button class="btn btn-paste" onclick="pasteText()">📋 Paste</button>
+      <button class="btn btn-secondary" onclick="copyAll()">⎘ Copy</button>
+      <button class="btn btn-danger" onclick="clearEditor()">🗑</button>
+      <button class="btn btn-primary" onclick="downloadFile()">⬇ Save</button>
+    </div>
+  </div>
+  <div class="toolbar">
+    <button class="tool-btn" onclick="insertTab()">⇥ Tab</button>
+    <button class="tool-btn" onclick="wrapSelection('(',')')">( )</button>
+    <button class="tool-btn" onclick="wrapSelection('{','}')">{ }</button>
+    <button class="tool-btn" onclick="wrapSelection('[',']')">[ ]</button>
+    <button class="tool-btn" onclick="wrapSelection('&quot;','&quot;')">" "</button>
+    <button class="tool-btn" onclick="wrapSingle()">' '</button>
+    <button class="tool-btn" onclick="wrapSelection('`','`')">\` \`</button>
+    <div class="tool-separator"></div>
+    <button class="tool-btn" onclick="toggleComment()">//</button>
+    <button class="tool-btn" onclick="duplicateLine()">⎘</button>
+    <button class="tool-btn" onclick="deleteLine()">✕ Line</button>
+    <div class="tool-separator"></div>
+    <button class="tool-btn" onclick="toggleFind()">🔍</button>
+    <div class="line-count" id="lineCount">Ln:1 Ch:0</div>
+  </div>
+  <div class="find-bar" id="findBar">
+    <span style="font-size:12px;color:#8b949e;-webkit-text-fill-color:#8b949e">Find:</span>
+    <input type="text" id="findInput" placeholder="Search..." oninput="doFind()" onkeydown="findKeyNav(event)">
+    <button class="tool-btn" onclick="findNext()">▼</button>
+    <button class="tool-btn" onclick="findPrev()">▲</button>
+    <span class="find-info" id="findInfo"></span>
+    <button class="tool-btn" style="margin-left:auto" onclick="toggleFind()">✕</button>
+  </div>
+  <div class="editor-container">
+    <div class="line-numbers" id="lineNumbers">1</div>
+    <div class="editor-wrapper">
+      <textarea id="code-editor" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off"
+        oninput="onEditorInput()" onscroll="syncScroll()" onkeydown="handleKeydown(event)"
+        placeholder="// Paste or type your code here..."></textarea>
+    </div>
+  </div>
+  <div class="statusbar">
+    <div class="status-item"><div class="status-dot"></div> Ready</div>
+    <div class="status-item" id="cursorPos">Ln 1, Col 1</div>
+    <div class="status-item" id="selectionInfo"></div>
+    <div class="status-item" id="formatLabel">Plain Text</div>
+  </div>
+</div>
+
+<!-- CONVERSATION VIEWER PAGE -->
+<div class="page" id="page-viewer">
+  <div class="topnav">
+    <div class="dots-grid" onclick="toggleCvSidebar()">
+      <span></span><span></span><span></span>
+      <span></span><span></span><span></span>
+      <span></span><span></span><span></span>
+    </div>
+    <div class="topnav-logo">Conversation<span> Viewer</span></div>
+    <button class="nav-btn" style="margin-left:auto" onclick="openDrawer()">☰</button>
+  </div>
+  <div class="cv-layout">
+    <div class="cv-backdrop" id="cvBackdrop" onclick="closeCvSidebar()"></div>
+    <div class="cv-sidebar" id="cvSidebar">
+      <div class="cv-sidebar-top">
+        <button class="cv-upload-btn" onclick="document.getElementById('cv-file-input').click()">📂 Load conversations.json</button>
+        <input type="file" id="cv-file-input" accept="*/*" onchange="loadConversations(event)">
+        <input type="text" class="cv-search" id="cv-search" placeholder="🔍 Search..." oninput="filterConversations()">
+      </div>
+      <div class="cv-stats" id="cv-stats">No file loaded</div>
+      <div class="cv-list" id="cv-list"><div class="cv-empty">📁 Load a conversations file</div></div>
+    </div>
+    <div class="cv-main">
+      <div class="cv-topbar" id="cv-topbar" style="display:none">
+        <div class="cv-conv-title" id="cv-conv-title"></div>
+        <div class="cv-conv-meta" id="cv-conv-meta"></div>
+      </div>
+      <div class="cv-messages" id="cv-messages">
+        <div class="cv-welcome">
+          <div class="cv-welcome-icon">💬</div>
+          <h2>Conversation Viewer</h2>
+          <p>exported conversations.json file load করো</p>
+          <div class="cv-welcome-hint" onclick="toggleCvSidebar()">
+            <div class="dots-grid" style="padding:0;pointer-events:none"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+            বাম পাশের বাটন চাপলে list আসবে
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NOTE PAD PAGE -->
+<div class="page" id="page-notepad">
+  <div class="topnav">
+    <div class="dots-grid" onclick="toggleNoteSidebar()">
+      <span></span><span></span><span></span>
+      <span></span><span></span><span></span>
+      <span></span><span></span><span></span>
+    </div>
+    <div class="topnav-logo">Note<span>Pad</span></div>
+    <button class="nav-btn" style="margin-left:auto" onclick="openDrawer()">☰</button>
+  </div>
+  <div class="note-layout">
+    <div class="cv-backdrop" id="noteBackdrop" onclick="closeNoteSidebar()"></div>
+    <div class="cv-sidebar" id="noteSidebar">
+      <div class="cv-sidebar-top">
+        <button class="cv-upload-btn" onclick="openTemplateModal()">+ New Note</button>
+        <input type="text" class="cv-search" id="noteSearch" placeholder="🔍 Search notes..." oninput="filterNotes()">
+      </div>
+      <div class="cv-stats" id="noteStats">0 notes</div>
+      <div class="cv-list" id="noteList"></div>
+    </div>
+    <div class="note-main">
+      <div class="note-empty" id="noteEmpty">
+        <div class="note-empty-icon">📝</div>
+        <h2>Note Pad</h2>
+        <p>বাম পাশের বাটন চেপে note তৈরি করো</p>
+        <div class="cv-welcome-hint" onclick="openTemplateModal()" style="margin-top:12px">
+          <span style="font-size:20px">📋</span>
+          Template বেছে নাও
+        </div>
+      </div>
+      <div id="noteEditorWrapper" style="display:none;flex:1;flex-direction:column;overflow:hidden;min-height:0">
+        <!-- Blank toolbar -->
+        <div id="blankToolbar" class="note-toolbar">
+          <button class="note-tool-btn" id="btnBold" onclick="noteFormat('bold')"><b>B</b></button>
+          <button class="note-tool-btn" id="btnItalic" onclick="noteFormat('italic')"><i>I</i></button>
+          <button class="note-tool-btn" id="btnUnderline" onclick="noteFormat('underline')"><u>U</u></button>
+          <div class="note-sep"></div>
+          <button class="note-tool-btn" id="btnUl" onclick="noteFormat('ul')">• List</button>
+          <button class="note-tool-btn" id="btnOl" onclick="noteFormat('ol')">1. List</button>
+          <div class="note-sep"></div>
+          <button class="note-tool-btn" style="color:#f85149;-webkit-text-fill-color:#f85149" onclick="deleteActiveNote()">🗑</button>
+        </div>
+        <div class="note-title-bar">
+          <input type="text" class="note-title-input" id="noteTitleInput" placeholder="Note title..." oninput="onNoteTitleChange()">
+        </div>
+        <!-- Blank editor -->
+        <div class="note-editor-area" id="blankEditorArea">
+          <div class="note-editor" id="noteEditor" contenteditable="true" spellcheck="true" oninput="onNoteChange()"></div>
+        </div>
+        <!-- Todo editor -->
+        <div id="todoEditorArea" style="display:none;flex:1;overflow-y:auto;background:#0d1117;padding:12px 16px;flex-direction:column">
+          <div id="todoList" style="display:flex;flex-direction:column;gap:2px"></div>
+          <button onclick="addTodoItem()" style="display:flex;align-items:center;gap:8px;background:transparent;border:none;color:#484f58;-webkit-text-fill-color:#484f58;font-size:14px;cursor:pointer;padding:10px 4px;text-align:left;margin-top:4px">
+            <span style="font-size:18px">+</span> Add item
+          </button>
+          <div style="padding:8px 4px;display:flex;gap:8px">
+            <button class="note-tool-btn" style="color:#f85149;-webkit-text-fill-color:#f85149" onclick="deleteActiveNote()">🗑 Delete</button>
+          </div>
+        </div>
+        <div class="note-statusbar">
+          <span class="note-stat" id="noteWordCount">Words: 0</span>
+          <span class="note-stat" id="noteCharCount">Chars: 0</span>
+          <span class="note-stat" id="noteAutoSave">Auto-saved ✓</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- PASTE MODAL -->
+<div id="pasteModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:300;align-items:center;justify-content:center">
+  <div style="background:#161b22;border:1px solid #30363d;border-radius:14px;padding:20px;width:300px;max-width:92vw">
+    <div style="font-size:14px;font-weight:700;color:#e6edf3;-webkit-text-fill-color:#e6edf3;margin-bottom:10px">📋 Paste করো</div>
+    <div style="font-size:12px;color:#8b949e;-webkit-text-fill-color:#8b949e;margin-bottom:10px">নিচের box এ long press করে Paste চাপো</div>
+    <textarea id="pasteArea" style="width:100%;height:120px;background:#0d1117;border:1px solid #58a6ff;border-radius:8px;color:#c9d1d9;-webkit-text-fill-color:#c9d1d9;padding:10px;font-size:13px;resize:none;outline:none;caret-color:#58a6ff" placeholder="এখানে paste করো..."></textarea>
+    <div style="display:flex;gap:8px;margin-top:12px">
+      <button onclick="confirmPaste()" style="flex:1;padding:10px;background:#238636;border:none;border-radius:8px;color:#fff;-webkit-text-fill-color:#fff;font-size:13px;font-weight:600;cursor:pointer">✓ OK</button>
+      <button onclick="closePasteModal()" style="flex:1;padding:10px;background:#21262d;border:1px solid #30363d;border-radius:8px;color:#8b949e;-webkit-text-fill-color:#8b949e;font-size:13px;cursor:pointer">বাতিল</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── NAVIGATION ──
+let currentPage = 'home';
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  currentPage = name;
+  ['editor','viewer','notepad'].forEach(t => {
+    const el = document.getElementById('di-' + t);
+    if (el) el.classList.toggle('active-tool', t === name);
+  });
+  if (name === 'editor') editor.focus();
+  if (name === 'notepad') renderNoteList();
+}
+function goHome() { showPage('home'); closeCvSidebar(); closeNoteSidebar(); closeDrawer(); }
+function openDrawer() { document.getElementById('rightDrawer').classList.add('open'); document.getElementById('drawerBackdrop').classList.add('open'); }
+function closeDrawer() { document.getElementById('rightDrawer').classList.remove('open'); document.getElementById('drawerBackdrop').classList.remove('open'); }
+function toggleCvSidebar() { document.getElementById('cvSidebar').classList.contains('open') ? closeCvSidebar() : openCvSidebar(); }
+function openCvSidebar() { document.getElementById('cvSidebar').classList.add('open'); document.getElementById('cvBackdrop').classList.add('open'); }
+function closeCvSidebar() { document.getElementById('cvSidebar').classList.remove('open'); document.getElementById('cvBackdrop').classList.remove('open'); }
+function toggleNoteSidebar() { document.getElementById('noteSidebar').classList.contains('open') ? closeNoteSidebar() : openNoteSidebar(); }
+function openNoteSidebar() { document.getElementById('noteSidebar').classList.add('open'); document.getElementById('noteBackdrop').classList.add('open'); renderNoteList(); }
+function closeNoteSidebar() { document.getElementById('noteSidebar').classList.remove('open'); document.getElementById('noteBackdrop').classList.remove('open'); }
+
+// ── CODE EDITOR ──
+const editor = document.getElementById('code-editor');
+const lineNumbers = document.getElementById('lineNumbers');
+const formatLabels = {txt:'Plain Text',html:'HTML',css:'CSS',js:'JavaScript',py:'Python',json:'JSON',md:'Markdown',xml:'XML',sql:'SQL',php:'PHP',ts:'TypeScript',jsx:'JSX',c:'C',cpp:'C++',java:'Java',sh:'Shell Script',yaml:'YAML',csv:'CSV'};
+function onFormatChange() { document.getElementById('formatLabel').textContent = formatLabels[document.getElementById('fileFormat').value]||''; }
+function updateLineNumbers() { const lines=editor.value.split('\n').length; lineNumbers.innerHTML=Array.from({length:lines},(_,i)=>i+1).join('<br>'); document.getElementById('lineCount').textContent='Ln:'+lines+' Ch:'+editor.value.length; }
+function syncScroll() { lineNumbers.style.transform='translateY(-'+editor.scrollTop+'px)'; }
+function onEditorInput() { updateLineNumbers(); updateCursor(); }
+editor.addEventListener('click', updateCursor);
+editor.addEventListener('keyup', updateCursor);
+function updateCursor() { const pos=editor.selectionStart,lines=editor.value.substring(0,pos).split('\n'); document.getElementById('cursorPos').textContent='Ln '+lines.length+', Col '+(lines[lines.length-1].length+1); const sel=editor.selectionEnd-editor.selectionStart; document.getElementById('selectionInfo').textContent=sel>0?sel+' sel':''; }
+function handleKeydown(e) {
+  if(e.key==='Tab'){e.preventDefault();const s=editor.selectionStart,en=editor.selectionEnd;editor.value=editor.value.substring(0,s)+'  '+editor.value.substring(en);editor.selectionStart=editor.selectionEnd=s+2;onEditorInput();}
+  if(e.ctrlKey&&e.key==='s'){e.preventDefault();downloadFile();}
+  if(e.ctrlKey&&e.key==='f'){e.preventDefault();toggleFind();}
+  const pairs={'(':')','[':']','{':'}','"':'"',"'":"'",'`':'`'};
+  if(pairs[e.key]){const s=editor.selectionStart,en=editor.selectionEnd;if(s!==en){e.preventDefault();const sel=editor.value.substring(s,en);editor.value=editor.value.substring(0,s)+e.key+sel+pairs[e.key]+editor.value.substring(en);editor.selectionStart=s+1;editor.selectionEnd=en+1;onEditorInput();}}
+  if(e.key==='Enter'){const s=editor.selectionStart,ls=editor.value.lastIndexOf('\n',s-1)+1,cl=editor.value.substring(ls,s),ind=cl.match(/^(\s*)/)[1];if(editor.value[s-1]==='{'&&editor.value[s]==='}'){e.preventDefault();const ins='\n'+ind+'  \n'+ind;editor.value=editor.value.substring(0,s)+ins+editor.value.substring(s);editor.selectionStart=editor.selectionEnd=s+ind.length+3;onEditorInput();}else if(ind){e.preventDefault();const ins='\n'+ind;editor.value=editor.value.substring(0,s)+ins+editor.value.substring(s);editor.selectionStart=editor.selectionEnd=s+ins.length;onEditorInput();}}
+}
+function insertTab(){const s=editor.selectionStart;editor.value=editor.value.substring(0,s)+'  '+editor.value.substring(editor.selectionEnd);editor.selectionStart=editor.selectionEnd=s+2;editor.focus();onEditorInput();}
+function wrapSelection(o,c){const s=editor.selectionStart,en=editor.selectionEnd,sel=editor.value.substring(s,en)||'text';editor.value=editor.value.substring(0,s)+o+sel+c+editor.value.substring(en);editor.selectionStart=s+1;editor.selectionEnd=s+1+sel.length;editor.focus();onEditorInput();}
+function wrapSingle(){wrapSelection("'","'");}
+function toggleComment(){const s=editor.selectionStart,val=editor.value,ls=val.lastIndexOf('\n',s-1)+1,le=val.indexOf('\n',s),en=le===-1?val.length:le,line=val.substring(ls,en);let nl;if(line.trimStart().startsWith('//')){nl=line.replace(/^(\s*)\/\/\s?/,'$1');}else if(line.trimStart().startsWith('#')){nl=line.replace(/^(\s*)#\s?/,'$1');}else{const fmt=document.getElementById('fileFormat').value;nl=line.replace(/^(\s*)/,'$1'+(['py','sh','yaml','csv'].includes(fmt)?'# ':'// '));}editor.value=val.substring(0,ls)+nl+val.substring(en);editor.selectionStart=editor.selectionEnd=s+(nl.length-line.length);editor.focus();onEditorInput();}
+function duplicateLine(){const s=editor.selectionStart,val=editor.value,ls=val.lastIndexOf('\n',s-1)+1,le=val.indexOf('\n',s),en=le===-1?val.length:le,line=val.substring(ls,en);editor.value=val.substring(0,en)+'\n'+line+val.substring(en);editor.selectionStart=editor.selectionEnd=en+1+(s-ls);editor.focus();onEditorInput();}
+function deleteLine(){const s=editor.selectionStart,val=editor.value,ls=val.lastIndexOf('\n',s-1)+1;let le=val.indexOf('\n',s);if(le===-1)le=val.length;else le++;editor.value=val.substring(0,ls)+val.substring(le);editor.selectionStart=editor.selectionEnd=ls;editor.focus();onEditorInput();}
+function insertTextAtCursor(text){const s=editor.selectionStart,en=editor.selectionEnd;editor.value=editor.value.substring(0,s)+text+editor.value.substring(en);editor.selectionStart=editor.selectionEnd=s+text.length;onEditorInput();editor.focus();}
+async function pasteText(){
+  if(navigator.clipboard&&navigator.clipboard.readText){
+    try{const text=await navigator.clipboard.readText();if(text){insertTextAtCursor(text);showToast('📋 Pasted!');return;}}catch(e){}
+  }
+  // Show paste modal
+  document.getElementById('pasteModal').style.display='flex';
+  setTimeout(()=>{const a=document.getElementById('pasteArea');a.value='';a.focus();},100);
+}
+function confirmPaste(){
+  const text=document.getElementById('pasteArea').value;
+  closePasteModal();
+  if(text){insertTextAtCursor(text);showToast('📋 Pasted!');}
+}
+function closePasteModal(){
+  document.getElementById('pasteModal').style.display='none';
+}
+let findMatches=[],findIndex=0;
+function toggleFind(){const b=document.getElementById('findBar');b.classList.toggle('visible');if(b.classList.contains('visible'))document.getElementById('findInput').focus();else{document.getElementById('findInfo').textContent='';findMatches=[];}}
+function doFind(){const term=document.getElementById('findInput').value;findMatches=[];if(!term){document.getElementById('findInfo').textContent='';return;}const val=editor.value;let i=0;while((i=val.indexOf(term,i))!==-1){findMatches.push(i);i+=term.length;}findIndex=0;showFindResult();}
+function showFindResult(){if(!findMatches.length){document.getElementById('findInfo').textContent='Not found';return;}document.getElementById('findInfo').textContent=(findIndex+1)+'/'+findMatches.length;const pos=findMatches[findIndex];editor.focus();editor.setSelectionRange(pos,pos+document.getElementById('findInput').value.length);}
+function findNext(){if(!findMatches.length)return;findIndex=(findIndex+1)%findMatches.length;showFindResult();}
+function findPrev(){if(!findMatches.length)return;findIndex=(findIndex-1+findMatches.length)%findMatches.length;showFindResult();}
+function findKeyNav(e){if(e.key==='Enter'){e.shiftKey?findPrev():findNext();}if(e.key==='Escape')toggleFind();}
+function downloadFile(){const name=document.getElementById('filename').value.trim()||'untitled',fmt=document.getElementById('fileFormat').value,fn=name.includes('.')?name:name+'.'+fmt,blob=new Blob([editor.value],{type:'text/plain;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=fn;a.click();URL.revokeObjectURL(url);showToast('Downloaded: '+fn);}
+function copyAll(){
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(editor.value).then(()=>showToast('⎘ Copied!')).catch(()=>copyFallback());
+  } else { copyFallback(); }
+}
+function copyFallback(){
+  const tmp=document.createElement('textarea');
+  tmp.value=editor.value;
+  tmp.style.cssText='position:fixed;top:-9999px;left:-9999px;opacity:0';
+  document.body.appendChild(tmp);
+  tmp.focus();tmp.select();
+  try{document.execCommand('copy');showToast('⎘ Copied!');}
+  catch(e){showToast('❌ Copy failed');}
+  document.body.removeChild(tmp);
+}
+function clearEditor(){if(editor.value&&!confirm('সব মুছে ফেলবো?'))return;editor.value='';onEditorInput();editor.focus();}
+
+// ── CONVERSATION VIEWER ──
+let allConversations=[],activeConvId=null,cvSearchTerm='';
+function loadConversations(event){
+  const file=event.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=(e)=>{
+    const text=e.target.result;
+    // JSON try
+    try{
+      const data=JSON.parse(text);
+      allConversations=Array.isArray(data)?data:(data.conversations||[]);
+      allConversations.sort((a,b)=>(b.updated_at||b.create_time||0)-(a.updated_at||a.create_time||0));
+      renderCvList(allConversations);
+      showToast('✅ Loaded '+allConversations.length+' conversations');
+      event.target.value='';
+      return;
+    }catch(err){}
+    // Other file — show as content viewer
+    const fname=file.name||'File';
+    const fid='file_'+Date.now();
+    allConversations=[{uuid:fid,title:fname,chat_messages:[{role:'assistant',text:text}],updated_at:Date.now()}];
+    renderCvList(allConversations);
+    activeConvId=fid;
+    document.getElementById('cv-topbar').style.display='flex';
+    document.getElementById('cv-conv-title').textContent=fname;
+    document.getElementById('cv-conv-meta').textContent=(text.length)+' chars';
+    const container=document.getElementById('cv-messages');
+    container.innerHTML='<div class="msg-bubble msg-assistant"><div class="msg-role">📄 '+escHtml(fname)+'</div><div class="msg-text"><pre style="white-space:pre-wrap;word-break:break-all;font-size:12px">'+escHtml(text)+'</pre></div></div>';
+    container.scrollTop=0;
+    showToast('✅ Opened: '+fname);
+    event.target.value='';
+  };
+  reader.readAsText(file);
+}
+function filterConversations(){cvSearchTerm=document.getElementById('cv-search').value.toLowerCase();renderCvList(allConversations.filter(c=>getTitle(c).toLowerCase().includes(cvSearchTerm)||searchInMessages(c,cvSearchTerm)));}
+function searchInMessages(conv,term){if(!term)return false;return getMessages(conv).some(m=>getMessageText(m).toLowerCase().includes(term));}
+function getTitle(conv){return conv.title||conv.name||'Untitled';}
+function getMessages(conv){if(conv.chat_messages)return conv.chat_messages;if(conv.mapping)return Object.values(conv.mapping).filter(n=>n.message&&n.message.content).sort((a,b)=>(a.message.create_time||0)-(b.message.create_time||0)).map(n=>n.message);return conv.messages||[];}
+function getMessageText(msg){if(!msg)return '';if(typeof msg.text==='string')return msg.text;if(typeof msg.content==='string')return msg.content;if(Array.isArray(msg.content))return msg.content.map(c=>typeof c==='string'?c:(c.text||c.content||'')).join('');if(msg.content&&msg.content.parts)return msg.content.parts.join('');return '';}
+function getRole(msg){const r=msg.role||msg.sender||'';return(r==='human'||r==='user')?'human':'assistant';}
+function formatDate(ts){if(!ts)return '';const d=new Date(typeof ts==='number'&&ts<1e12?ts*1000:ts);return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});}
+function renderCvList(conversations){const list=document.getElementById('cv-list');document.getElementById('cv-stats').textContent=conversations.length+' of '+allConversations.length+' conversations';if(!conversations.length){list.innerHTML='<div class="cv-empty">No conversations found</div>';return;}list.innerHTML=conversations.map(conv=>{const title=getTitle(conv),msgs=getMessages(conv),ts=formatDate(conv.updated_at||conv.create_time);const msgCount=msgs.filter(m=>m).length,isActive=(conv.uuid||conv.id)===activeConvId;const id=conv.uuid||conv.id||'',ht=cvSearchTerm?highlightText(title,cvSearchTerm):escHtml(title);return '<div class="cv-item'+(isActive?' active':'')+'" onclick="openConversation(\''+id+'\')"><div class="cv-item-title">'+ht+'</div><div class="cv-item-meta">'+ts+(msgCount?' · '+msgCount+' msgs':'')+'</div></div>';}).join('');}
+function highlightText(text,term){const esc=escHtml(text);if(!term)return esc;return esc.replace(new RegExp('('+term.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi'),'<span class="highlight">$1</span>');}
+function openConversation(id){const conv=allConversations.find(c=>(c.uuid||c.id)===id);if(!conv)return;activeConvId=id;closeCvSidebar();const term=cvSearchTerm;renderCvList(allConversations.filter(c=>getTitle(c).toLowerCase().includes(term)||searchInMessages(c,term)));const title=getTitle(conv),msgs=getMessages(conv),ts=formatDate(conv.updated_at||conv.create_time);document.getElementById('cv-topbar').style.display='flex';document.getElementById('cv-conv-title').textContent=title;document.getElementById('cv-conv-meta').textContent=ts+' · '+msgs.length+' msgs';const container=document.getElementById('cv-messages');if(!msgs.length){container.innerHTML='<div class="cv-welcome"><div class="cv-welcome-icon">📭</div><h2>No messages</h2></div>';return;}container.innerHTML=msgs.filter(m=>m&&getMessageText(m)).map(msg=>{const role=getRole(msg),text=getMessageText(msg),formatted=formatMsgText(text);return '<div class="msg-bubble msg-'+role+'"><div class="msg-role">'+(role==='human'?'👤 YOU':'🤖 CLAUDE')+'</div><div class="msg-text">'+formatted+'</div></div>';}).join('');container.scrollTop=0;}
+function formatMsgText(text){let html=escHtml(text);html=html.replace(/```[\s\S]*?```/g,m=>'<pre>'+m.slice(3,-3).replace(/^[^\n]*\n/,'')+'</pre>');html=html.replace(/`([^`]+)`/g,'<code>$1</code>');html=html.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');html=html.replace(/\n/g,'<br>');return html;}
+function escHtml(str){return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+// ── NOTE PAD ──
+let notes=[],activeNoteId=null,noteSearchTerm='',noteSaveTimer=null;
+
+function loadNotesFromStorage(){try{notes=JSON.parse(localStorage.getItem('toolkit_notes')||'[]');}catch(e){notes=[];}}
+function saveNotesToStorage(){try{localStorage.setItem('toolkit_notes',JSON.stringify(notes));}catch(e){}}
+
+function openTemplateModal(){document.getElementById('templateModal').style.display='flex';closeNoteSidebar();}
+function closeTemplateModal(){document.getElementById('templateModal').style.display='none';}
+
+function applyTemplate(type){
+  closeTemplateModal();
+  const id='note_'+Date.now();
+  const note={id,title:type==='todo'?'Todo List':'',content:'',html:'',isTodo:type==='todo',todoItems:type==='todo'?[]:undefined,created:Date.now(),updated:Date.now()};
+  notes.unshift(note);
+  saveNotesToStorage();
+  renderNoteList();
+  openNote(id);
+}
+
+function deleteActiveNote(){
+  if(!activeNoteId)return;
+  if(!confirm('এই note মুছে ফেলবো?'))return;
+  notes=notes.filter(n=>n.id!==activeNoteId);
+  saveNotesToStorage();
+  activeNoteId=null;
+  document.getElementById('noteEditorWrapper').style.display='none';
+  document.getElementById('noteEmpty').style.display='flex';
+  renderNoteList();
+  updateNoteStats2();
+}
+
+function filterNotes(){noteSearchTerm=document.getElementById('noteSearch').value.toLowerCase();renderNoteList();}
+function updateNoteStats2(){const el=document.getElementById('noteStats');if(el)el.textContent=notes.length+' notes';}
+
+function renderNoteList(){
+  const list=document.getElementById('noteList');
+  const filtered=notes.filter(n=>(n.title||'').toLowerCase().includes(noteSearchTerm)||(n.content||'').toLowerCase().includes(noteSearchTerm));
+  updateNoteStats2();
+  if(!filtered.length){list.innerHTML='<div style="padding:16px;text-align:center;font-size:12px;color:#484f58">'+(notes.length?'Not found':'No notes yet')+'</div>';return;}
+  list.innerHTML=filtered.map(n=>`
+    <div class="cv-item${n.id===activeNoteId?' active':''}"
+      onclick="openNote('${n.id}')"
+      oncontextmenu="showNoteCtxMenu('${n.id}',event)"
+      ontouchstart="startNoteLongPress('${n.id}',event)"
+      ontouchend="cancelNoteLongPress()"
+      ontouchmove="cancelNoteLongPress()">
+      <div class="cv-item-title">${n.pinned?'📌 ':''}${escHtml(n.title||'Untitled')}${n.isTodo?' ✅':''}</div>
+      <div class="cv-item-meta">${escHtml((n.content||'').substring(0,40)||'Empty note')}</div>
+    </div>
+  `).join('');
+}
+
+function openNote(id){
+  const note=notes.find(n=>n.id===id);if(!note)return;
+  activeNoteId=id;
+  closeNoteSidebar();
+  document.getElementById('noteEmpty').style.display='none';
+  const wrapper=document.getElementById('noteEditorWrapper');
+  wrapper.style.display='flex';wrapper.style.flexDirection='column';wrapper.style.overflow='hidden';wrapper.style.flex='1';wrapper.style.minHeight='0';
+  document.getElementById('noteTitleInput').value=note.title||'';
+  if(note.isTodo){
+    document.getElementById('blankEditorArea').style.display='none';
+    document.getElementById('blankToolbar').style.display='none';
+    document.getElementById('todoEditorArea').style.display='flex';
+    renderTodoList(note);
+  }else{
+    document.getElementById('blankEditorArea').style.display='';
+    document.getElementById('blankToolbar').style.display='';
+    document.getElementById('todoEditorArea').style.display='none';
+    document.getElementById('noteEditor').innerHTML=note.html||'';
+  }
+  updateNoteStats();
+  renderNoteList();
+}
+
+function onNoteTitleChange(){if(!activeNoteId)return;const note=notes.find(n=>n.id===activeNoteId);if(!note)return;note.title=document.getElementById('noteTitleInput').value;note.updated=Date.now();scheduleNoteSave();}
+function onNoteChange(){if(!activeNoteId)return;const note=notes.find(n=>n.id===activeNoteId);if(!note)return;const ed=document.getElementById('noteEditor');note.html=ed.innerHTML;note.content=ed.innerText||ed.textContent||'';note.updated=Date.now();updateNoteStats();scheduleNoteSave();}
+function scheduleNoteSave(){document.getElementById('noteAutoSave').textContent='Saving...';clearTimeout(noteSaveTimer);noteSaveTimer=setTimeout(()=>{saveNotesToStorage();renderNoteList();document.getElementById('noteAutoSave').textContent='Auto-saved ✓';},800);}
+function updateNoteStats(){const text=(document.getElementById('noteEditor').innerText||'').trim();const words=text?text.split(/\s+/).length:0;document.getElementById('noteWordCount').textContent='Words: '+words;document.getElementById('noteCharCount').textContent='Chars: '+text.length;}
+
+function noteFormat(cmd){
+  document.getElementById('noteEditor').focus();
+  if(cmd==='bold')document.execCommand('bold');
+  else if(cmd==='italic')document.execCommand('italic');
+  else if(cmd==='underline')document.execCommand('underline');
+  else if(cmd==='ul')document.execCommand('insertUnorderedList');
+  else if(cmd==='ol')document.execCommand('insertOrderedList');
+  updateToolbarState();
+  onNoteChange();
+}
+
+function updateToolbarState(){
+  const cmds={btnBold:'bold',btnItalic:'italic',btnUnderline:'underline',btnUl:'insertUnorderedList',btnOl:'insertOrderedList'};
+  Object.entries(cmds).forEach(([id,cmd])=>{
+    const btn=document.getElementById(id);if(!btn)return;
+    btn.classList.toggle('active',document.queryCommandState(cmd));
+  });
+}
+
+document.addEventListener('selectionchange',function(){
+  if(document.activeElement===document.getElementById('noteEditor'))updateToolbarState();
+});
+
+// TODO LIST
+function renderTodoList(note){
+  if(!note.todoItems)note.todoItems=[];
+  const container=document.getElementById('todoList');
+  container.innerHTML='';
+  note.todoItems.forEach((item,idx)=>{
+    const row=document.createElement('div');
+    row.style.cssText='display:flex;align-items:center;gap:10px;padding:8px 4px;border-radius:6px';
+    const cb=document.createElement('input');cb.type='checkbox';cb.checked=item.done;cb.style.cssText='width:18px;height:18px;accent-color:#58a6ff;cursor:pointer;flex-shrink:0';
+    const inp=document.createElement('input');inp.type='text';inp.value=item.text;inp.placeholder='List item';
+    inp.style.cssText='flex:1;background:transparent;border:none;outline:none;font-size:14px;line-height:1.6;caret-color:#58a6ff;color:'+(item.done?'#484f58':'#c9d1d9')+';-webkit-text-fill-color:'+(item.done?'#484f58':'#c9d1d9')+';'+(item.done?'text-decoration:line-through':'');
+    const del=document.createElement('button');del.textContent='×';del.style.cssText='background:transparent;border:none;color:#484f58;-webkit-text-fill-color:#484f58;font-size:20px;cursor:pointer;padding:0 4px;-webkit-appearance:none;flex-shrink:0;line-height:1';
+    cb.addEventListener('change',()=>{item.done=cb.checked;inp.style.color=item.done?'#484f58':'#c9d1d9';inp.style.webkitTextFillColor=item.done?'#484f58':'#c9d1d9';inp.style.textDecoration=item.done?'line-through':'';saveTodo();});
+    inp.addEventListener('input',()=>{item.text=inp.value;saveTodo();});
+    inp.addEventListener('keydown',(e)=>{if(e.key==='Enter'){e.preventDefault();addTodoItem();}});
+    del.addEventListener('click',()=>{note.todoItems.splice(idx,1);saveTodo();renderTodoList(note);});
+    row.appendChild(cb);row.appendChild(inp);row.appendChild(del);
+    container.appendChild(row);
+  });
+}
+
+function addTodoItem(){const note=notes.find(n=>n.id===activeNoteId);if(!note||!note.isTodo)return;if(!note.todoItems)note.todoItems=[];note.todoItems.push({text:'',done:false});saveTodo();renderTodoList(note);setTimeout(()=>{const inputs=document.querySelectorAll('#todoList input[type=text]');if(inputs.length)inputs[inputs.length-1].focus();},50);}
+function saveTodo(){const note=notes.find(n=>n.id===activeNoteId);if(!note)return;note.content=(note.todoItems||[]).map(i=>i.text).join('\n');note.updated=Date.now();scheduleNoteSave();}
+
+// ── NOTE CONTEXT MENU ──
+let ctxNoteId=null,noteLongPressTimer=null;
+
+function showNoteCtxMenu(id,e){
+  e.preventDefault();e.stopPropagation();
+  ctxNoteId=id;
+  const note=notes.find(n=>n.id===id);
+  const menu=document.getElementById('noteCtxMenu');
+  const pinBtn=document.getElementById('ctxPinBtn');
+  if(pinBtn)pinBtn.textContent=(note&&note.pinned)?'📌 Unpin':'📌 Pin';
+  const x=e.clientX||50,y=e.clientY||100;
+  menu.style.left=Math.min(x,window.innerWidth-180)+'px';
+  menu.style.top=Math.min(y,window.innerHeight-160)+'px';
+  menu.style.display='block';
+}
+function hideNoteCtxMenu(){document.getElementById('noteCtxMenu').style.display='none';}
+function startNoteLongPress(id,e){cancelNoteLongPress();noteLongPressTimer=setTimeout(()=>{const touch=e.touches[0];showNoteCtxMenu(id,{clientX:touch.clientX,clientY:touch.clientY,preventDefault:()=>{},stopPropagation:()=>{}});},500);}
+function cancelNoteLongPress(){if(noteLongPressTimer){clearTimeout(noteLongPressTimer);noteLongPressTimer=null;}}
+
+function ctxRename(){
+  hideNoteCtxMenu();
+  const note=notes.find(n=>n.id===ctxNoteId);if(!note)return;
+  const newName=prompt('নতুন নাম লিখো:',note.title||'Untitled');
+  if(newName===null)return;
+  note.title=newName.trim();note.updated=Date.now();
+  saveNotesToStorage();renderNoteList();
+  if(activeNoteId===ctxNoteId){const inp=document.getElementById('noteTitleInput');if(inp)inp.value=note.title;}
+  showToast('Renamed!');
+}
+
+function ctxPin(){
+  hideNoteCtxMenu();
+  const note=notes.find(n=>n.id===ctxNoteId);if(!note)return;
+  if(!note.pinned){
+    note.originalIndex=notes.indexOf(note);
+    note.pinned=true;
+    notes.splice(notes.indexOf(note),1);
+    notes.unshift(note);
+  }else{
+    note.pinned=false;
+    const origIdx=note.originalIndex!==undefined?note.originalIndex:notes.length-1;
+    notes.splice(notes.indexOf(note),1);
+    notes.splice(Math.min(origIdx,notes.length),0,note);
+    delete note.originalIndex;
+  }
+  note.updated=Date.now();
+  saveNotesToStorage();renderNoteList();
+  showToast(note.pinned?'Pinned!':'Unpinned!');
+}
+
+function ctxDelete(){
+  hideNoteCtxMenu();
+  setTimeout(()=>{
+    if(!confirm('এই note মুছে ফেলবো?'))return;
+    notes=notes.filter(n=>n.id!==ctxNoteId);
+    saveNotesToStorage();
+    if(activeNoteId===ctxNoteId){activeNoteId=null;document.getElementById('noteEditorWrapper').style.display='none';document.getElementById('noteEmpty').style.display='flex';}
+    renderNoteList();updateNoteStats2();showToast('Deleted!');
+  },100);
+}
+
+document.addEventListener('click',function(e){
+  const menu=document.getElementById('noteCtxMenu');
+  if(menu&&menu.style.display==='block'&&!menu.contains(e.target))hideNoteCtxMenu();
+});
+
+// ── TOAST ──
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
+
+// INIT
+loadNotesFromStorage();
+updateLineNumbers();
+onFormatChange();
+</script>
+</body>
+</html>
