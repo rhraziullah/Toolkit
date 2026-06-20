@@ -127,7 +127,12 @@
   .cv-item-meta { font-size: 10px; color: #484f58 !important; -webkit-text-fill-color: #484f58 !important; margin-top: 2px; }
   .cv-empty { padding: 20px 10px; text-align: center; color: #484f58 !important; -webkit-text-fill-color: #484f58 !important; font-size: 12px; line-height: 1.6; }
   .cv-main { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
-  .cv-topbar { background: #161b22; border-bottom: 1px solid #30363d; padding: 10px 14px; display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+  .cv-topbar { background: #161b22; border-bottom: 1px solid #30363d; padding: 8px 14px; display: flex; flex-direction: column; gap: 6px; flex-shrink: 0; }
+  .cv-topbar-row1 { display: flex; align-items: center; gap: 8px; }
+  .cv-topbar-row2 { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+  .cv-topbar-actions { display: flex; gap: 6px; }
+  .cv-icon-btn { background: transparent !important; border: 1px solid #30363d; color: #8b949e !important; -webkit-text-fill-color: #8b949e !important; padding: 4px 9px; border-radius: 6px; font-size: 11px; cursor: pointer; -webkit-appearance: none; white-space: nowrap; }
+  .cv-icon-btn:hover { background: #21262d !important; color: #c9d1d9 !important; -webkit-text-fill-color: #c9d1d9 !important; }
   .cv-conv-title { font-size: 13px; font-weight: 600; color: #e6edf3 !important; -webkit-text-fill-color: #e6edf3 !important; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .cv-conv-meta { font-size: 11px; color: #484f58 !important; -webkit-text-fill-color: #484f58 !important; white-space: nowrap; }
   .cv-messages { flex: 1; overflow-y: auto; padding: 16px 14px; display: flex; flex-direction: column; gap: 14px; background: #0d1117; }
@@ -146,6 +151,14 @@
   .msg-text { color: inherit !important; -webkit-text-fill-color: inherit !important; }
   .msg-text pre { background-color: #0d1117 !important; border: 1px solid #30363d; border-radius: 6px; padding: 10px 12px; overflow-x: auto; font-size: 12px; margin: 8px 0; white-space: pre-wrap; font-family: 'Cascadia Code','Fira Code','Consolas',monospace; color: #c9d1d9 !important; -webkit-text-fill-color: #c9d1d9 !important; }
   .msg-text code { background-color: #0d1117 !important; padding: 1px 5px; border-radius: 3px; font-size: 12px; font-family: monospace; color: #79c0ff !important; -webkit-text-fill-color: #79c0ff !important; }
+  .msg-bubble-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 4px; }
+  .msg-bubble-head .msg-role { margin-bottom: 0; }
+  .msg-del-btn { background: transparent !important; border: none; color: inherit !important; -webkit-text-fill-color: inherit !important; opacity: 0.45; font-size: 13px; cursor: pointer; padding: 0 2px; line-height: 1; -webkit-appearance: none; flex-shrink: 0; }
+  .msg-del-btn:hover { opacity: 1; }
+  .msg-text { cursor: pointer; border-radius: 6px; transition: background 0.12s; }
+  .msg-text:hover { background: rgba(255,255,255,0.05); }
+  .cv-msg-edit-area { width: 100%; background: #0d1117 !important; border: 1px solid #58a6ff; border-radius: 8px; color: #c9d1d9 !important; -webkit-text-fill-color: #c9d1d9 !important; font-family: inherit; font-size: 13px; line-height: 1.7; padding: 8px 10px; resize: none; outline: none; min-height: 60px; -webkit-appearance: none; }
+  .cv-msg-edit-actions { display: flex; gap: 8px; margin-top: 8px; }
   .highlight { background: #f0e040 !important; color: #000 !important; -webkit-text-fill-color: #000 !important; border-radius: 2px; }
 
   /* NOTE PAD */
@@ -167,6 +180,52 @@
   .note-empty-icon { font-size: 40px; }
   .note-empty h2 { font-size: 16px; color: #8b949e !important; -webkit-text-fill-color: #8b949e !important; font-weight: 500; }
   .note-empty p { font-size: 12px; color: #484f58 !important; -webkit-text-fill-color: #484f58 !important; }
+
+  /* KROMO */
+  .kr-body { flex: 1; overflow-y: auto; padding: 16px 14px 100px; background: #0d1117; }
+  .kr-card { background: #161b22; border: 1px solid #30363d; border-radius: 14px; padding: 16px; margin-bottom: 14px; position: relative; }
+  .kr-card-head { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+  .kr-card-title { flex: 1; font-size: 15px; font-weight: 700; margin: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #e6edf3 !important; -webkit-text-fill-color: #e6edf3 !important; }
+  .kr-pin-badge { font-size: 13px; flex-shrink: 0; }
+  .kr-gear-btn { background: transparent !important; border: none; font-size: 17px; color: #8b949e !important; -webkit-text-fill-color: #8b949e !important; cursor: pointer; padding: 5px; border-radius: 6px; line-height: 1; flex-shrink: 0; -webkit-appearance: none; }
+  .kr-gear-btn:hover { background: #21262d !important; color: #c9d1d9 !important; -webkit-text-fill-color: #c9d1d9 !important; }
+
+  .kr-counter-panel { background: #0d1117; border: 1px solid #30363d; border-radius: 10px; padding: 16px; display: flex; align-items: baseline; justify-content: center; gap: 6px; margin-bottom: 12px; position: relative; }
+  .kr-counter-num { font-family: 'Cascadia Code','Fira Code','Consolas',monospace; font-size: 34px; font-weight: 700; color: #58a6ff !important; -webkit-text-fill-color: #58a6ff !important; letter-spacing: 1px; }
+  .kr-counter-sep { font-family: 'Cascadia Code','Fira Code','Consolas',monospace; font-size: 18px; color: #484f58 !important; -webkit-text-fill-color: #484f58 !important; }
+  .kr-counter-total { font-family: 'Cascadia Code','Fira Code','Consolas',monospace; font-size: 18px; color: #8b949e !important; -webkit-text-fill-color: #8b949e !important; }
+  .kr-restart-btn { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: #21262d !important; border: 1px solid #30363d; color: #8b949e !important; -webkit-text-fill-color: #8b949e !important; width: 30px; height: 30px; border-radius: 50%; font-size: 15px; cursor: pointer; -webkit-appearance: none; }
+
+  .kr-item-display { width: 100%; background: #0d1117 !important; border: 1px solid #30363d; border-radius: 10px; padding: 13px 15px; margin-bottom: 12px; cursor: pointer; text-align: left; display: flex; flex-direction: column; gap: 3px; font-family: inherit; -webkit-appearance: none; }
+  .kr-item-text { font-size: 16px; color: #e6edf3 !important; -webkit-text-fill-color: #e6edf3 !important; word-break: break-all; font-weight: 500; }
+  .kr-copy-hint { font-size: 11px; color: #484f58 !important; -webkit-text-fill-color: #484f58 !important; }
+  .kr-item-display:active { background: #1f3a5f !important; border-color: #58a6ff; }
+
+  .kr-btn { width: 100%; border: none; border-radius: 10px; padding: 13px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; -webkit-appearance: none; }
+  .kr-btn-next { background: #238636 !important; color: #fff !important; -webkit-text-fill-color: #fff !important; }
+  .kr-btn-next:disabled { background: #21262d !important; color: #484f58 !important; -webkit-text-fill-color: #484f58 !important; }
+  .kr-btn-primary { background: #238636 !important; color: #fff !important; -webkit-text-fill-color: #fff !important; flex: 1; }
+  .kr-btn-ghost { background: transparent !important; border: 1px solid #30363d; color: #8b949e !important; -webkit-text-fill-color: #8b949e !important; flex: 1; }
+  .kr-edit-actions { display: flex; gap: 10px; margin-top: 14px; }
+
+  .kr-title-input, .kr-items-input { width: 100%; background: #0d1117 !important; border: 1px solid #30363d; border-radius: 8px; padding: 11px 12px; color: #c9d1d9 !important; -webkit-text-fill-color: #c9d1d9 !important; font-family: inherit; font-size: 14px; -webkit-appearance: none; }
+  .kr-title-input { margin-bottom: 10px; font-weight: 600; }
+  .kr-items-input { min-height: 130px; resize: vertical; line-height: 1.6; }
+  .kr-title-input:focus, .kr-items-input:focus { outline: none; border-color: #58a6ff; }
+  .kr-title-input::placeholder, .kr-items-input::placeholder { color: #484f58 !important; -webkit-text-fill-color: #484f58 !important; }
+
+  .kr-menu { position: absolute; top: 38px; right: 0; background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 6px; min-width: 165px; box-shadow: 0 8px 24px rgba(0,0,0,0.5); z-index: 10; }
+  .kr-menu-item { display: block; width: 100%; text-align: left; background: transparent !important; border: none; color: #c9d1d9 !important; -webkit-text-fill-color: #c9d1d9 !important; font-size: 13px; padding: 9px 11px; border-radius: 8px; cursor: pointer; font-family: inherit; -webkit-appearance: none; }
+  .kr-menu-item:hover { background: #21262d !important; }
+  .kr-menu-danger { color: #f85149 !important; -webkit-text-fill-color: #f85149 !important; }
+  .kr-menu-confirm-text { font-size: 12px; color: #8b949e !important; -webkit-text-fill-color: #8b949e !important; padding: 7px 11px 4px; margin: 0; }
+
+  .kr-add-card-btn { width: 100%; background: transparent !important; border: 1.5px dashed #30363d; color: #8b949e !important; -webkit-text-fill-color: #8b949e !important; border-radius: 14px; padding: 15px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; margin-bottom: 16px; -webkit-appearance: none; }
+  .kr-add-card-btn:hover { border-color: #58a6ff; color: #58a6ff !important; -webkit-text-fill-color: #58a6ff !important; }
+
+  .kr-empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px; text-align: center; }
+  .kr-add-fab { width: 60px; height: 60px; border-radius: 50%; background: #238636 !important; color: #fff !important; -webkit-text-fill-color: #fff !important; font-size: 30px; border: none; cursor: pointer; margin-bottom: 16px; -webkit-appearance: none; }
+  .kr-empty-text { color: #8b949e !important; -webkit-text-fill-color: #8b949e !important; font-size: 13px; line-height: 1.7; margin: 0; }
 
   /* TOAST */
   .toast { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%) translateY(20px); background: #238636 !important; color: #fff !important; -webkit-text-fill-color: #fff !important; padding: 10px 20px; border-radius: 8px; font-size: 13px; opacity: 0; transition: all 0.3s; pointer-events: none; z-index: 999; white-space: nowrap; }
@@ -201,6 +260,10 @@
   <button class="drawer-item" id="di-notepad" onclick="showPage('notepad');closeDrawer()">
     <span class="drawer-item-icon">📝</span>
     <div><div class="drawer-item-text">Note Pad</div><div class="drawer-item-sub">Note লিখো ও সংগঠিত করো</div></div>
+  </button>
+  <button class="drawer-item" id="di-kromo" onclick="showPage('kromo');closeDrawer()">
+    <span class="drawer-item-icon">🗂️</span>
+    <div><div class="drawer-item-text">Kromo</div><div class="drawer-item-sub">List এক এক করে দেখো ও কপি করো</div></div>
   </button>
   <div class="drawer-divider"></div>
   <div class="drawer-section-title">শীঘ্রই আসছে</div>
@@ -265,6 +328,12 @@
         <div class="tool-card-icon">📝</div>
         <div class="tool-card-name">Note Pad</div>
         <div class="tool-card-desc">Note লিখো, সংগঠিত করো ও save করো</div>
+        <div class="tool-card-tag">Ready</div>
+      </button>
+      <button class="tool-card" onclick="showPage('kromo')">
+        <div class="tool-card-icon">🗂️</div>
+        <div class="tool-card-name">Kromo</div>
+        <div class="tool-card-desc">List বানাও, এক এক করে দেখো ও কপি করো</div>
         <div class="tool-card-tag">Ready</div>
       </button>
       <div class="tool-card soon">
@@ -368,8 +437,17 @@
     </div>
     <div class="cv-main">
       <div class="cv-topbar" id="cv-topbar" style="display:none">
-        <div class="cv-conv-title" id="cv-conv-title"></div>
-        <div class="cv-conv-meta" id="cv-conv-meta"></div>
+        <div class="cv-topbar-row1">
+          <div class="cv-conv-title" id="cv-conv-title"></div>
+          <button class="cv-icon-btn" title="Title rename করো" onclick="cvRenameTitle()">✏️</button>
+        </div>
+        <div class="cv-topbar-row2">
+          <div class="cv-conv-meta" id="cv-conv-meta"></div>
+          <div class="cv-topbar-actions">
+            <button class="cv-icon-btn" title="JSON হিসেবে save করো" onclick="cvDownload('json')">⬇ JSON</button>
+            <button class="cv-icon-btn" title="Text হিসেবে save করো" onclick="cvDownload('txt')">⬇ TXT</button>
+          </div>
+        </div>
       </div>
       <div class="cv-messages" id="cv-messages">
         <div class="cv-welcome">
@@ -456,6 +534,16 @@
   </div>
 </div>
 
+<!-- KROMO PAGE -->
+<div class="page" id="page-kromo">
+  <div class="topnav">
+    <button class="nav-btn" onclick="goHome()">←</button>
+    <div class="topnav-logo">Kro<span>mo</span></div>
+    <button class="nav-btn" style="margin-left:auto" onclick="openDrawer()">☰</button>
+  </div>
+  <div class="kr-body" id="kr-app"></div>
+</div>
+
 
 <!-- PASTE MODAL -->
 <div id="pasteModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:300;align-items:center;justify-content:center">
@@ -475,17 +563,53 @@
 <script>
 // ── NAVIGATION ──
 let currentPage = 'home';
+history.replaceState({ page: 'home' }, '', '');
+
 function showPage(name) {
+  const cameFromHome = (currentPage === 'home');
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-' + name).classList.add('active');
   currentPage = name;
-  ['editor','viewer','notepad'].forEach(t => {
+  ['editor','viewer','notepad','kromo'].forEach(t => {
     const el = document.getElementById('di-' + t);
     if (el) el.classList.toggle('active-tool', t === name);
   });
   if (name === 'editor') editor.focus();
   if (name === 'notepad') renderNoteList();
+
+  // ── BACK BUTTON HISTORY ──
+  // Home কে একটামাত্র history entry হিসেবে রাখি, আর কোনো tool-page এ ঢুকলে
+  // তার উপরে একটাই extra entry push করি (একাধিকবার push করি না)।
+  // ফলে back চাপলে সবসময় সরাসরি Home-এ আসবে, আর Home থেকে আবার back চাপলে app বন্ধ হবে।
+  if (name === 'home') {
+    if (history.state && history.state.page !== 'home') {
+      history.replaceState({ page: 'home' }, '', '');
+    }
+  } else if (cameFromHome) {
+    history.pushState({ page: 'tool' }, '', '');
+  } else {
+    history.replaceState({ page: 'tool' }, '', '');
+  }
 }
+
+function goToHomeUI() {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-home').classList.add('active');
+  currentPage = 'home';
+  ['editor','viewer','notepad','kromo'].forEach(t => {
+    const el = document.getElementById('di-' + t);
+    if (el) el.classList.remove('active-tool');
+  });
+  closeCvSidebar(); closeNoteSidebar(); closeDrawer();
+}
+
+window.addEventListener('popstate', function () {
+  if (currentPage !== 'home') {
+    goToHomeUI();
+  }
+  // আগে থেকেই Home-এ থাকলে কিছু করার দরকার নেই — browser/app নিজে থেকে বন্ধ হয়ে যাবে।
+});
+
 function goHome() { showPage('home'); closeCvSidebar(); closeNoteSidebar(); closeDrawer(); }
 function openDrawer() { document.getElementById('rightDrawer').classList.add('open'); document.getElementById('drawerBackdrop').classList.add('open'); }
 function closeDrawer() { document.getElementById('rightDrawer').classList.remove('open'); document.getElementById('drawerBackdrop').classList.remove('open'); }
@@ -565,6 +689,7 @@ function clearEditor(){if(editor.value&&!confirm('সব মুছে ফেল�
 
 // ── CONVERSATION VIEWER ──
 let allConversations=[],activeConvId=null,cvSearchTerm='';
+let cvEdits={},cvEditingMsgIdx=null;
 function loadConversations(event){
   const file=event.target.files[0];if(!file)return;
   const reader=new FileReader();
@@ -575,6 +700,9 @@ function loadConversations(event){
       const data=JSON.parse(text);
       allConversations=Array.isArray(data)?data:(data.conversations||[]);
       allConversations.sort((a,b)=>(b.updated_at||b.create_time||0)-(a.updated_at||a.create_time||0));
+      cvEdits={};activeConvId=null;cvEditingMsgIdx=null;
+      document.getElementById('cv-topbar').style.display='none';
+      document.getElementById('cv-messages').innerHTML='<div class="cv-welcome"><div class="cv-welcome-icon">💬</div><h2>Conversation Viewer</h2><p>তালিকা থেকে একটা conversation বেছে নাও</p></div>';
       renderCvList(allConversations);
       showToast('✅ Loaded '+allConversations.length+' conversations');
       event.target.value='';
@@ -584,29 +712,131 @@ function loadConversations(event){
     const fname=file.name||'File';
     const fid='file_'+Date.now();
     allConversations=[{uuid:fid,title:fname,chat_messages:[{role:'assistant',text:text}],updated_at:Date.now()}];
+    cvEdits={};cvEditingMsgIdx=null;
     renderCvList(allConversations);
-    activeConvId=fid;
-    document.getElementById('cv-topbar').style.display='flex';
-    document.getElementById('cv-conv-title').textContent=fname;
-    document.getElementById('cv-conv-meta').textContent=(text.length)+' chars';
-    const container=document.getElementById('cv-messages');
-    container.innerHTML='<div class="msg-bubble msg-assistant"><div class="msg-role">📄 '+escHtml(fname)+'</div><div class="msg-text"><pre style="white-space:pre-wrap;word-break:break-all;font-size:12px">'+escHtml(text)+'</pre></div></div>';
-    container.scrollTop=0;
+    openConversation(fid);
     showToast('✅ Opened: '+fname);
     event.target.value='';
   };
   reader.readAsText(file);
 }
-function filterConversations(){cvSearchTerm=document.getElementById('cv-search').value.toLowerCase();renderCvList(allConversations.filter(c=>getTitle(c).toLowerCase().includes(cvSearchTerm)||searchInMessages(c,cvSearchTerm)));}
+function filterConversations(){cvSearchTerm=document.getElementById('cv-search').value.toLowerCase();renderCvList(allConversations.filter(c=>cvDisplayTitle(c).toLowerCase().includes(cvSearchTerm)||searchInMessages(c,cvSearchTerm)));}
 function searchInMessages(conv,term){if(!term)return false;return getMessages(conv).some(m=>getMessageText(m).toLowerCase().includes(term));}
 function getTitle(conv){return conv.title||conv.name||'Untitled';}
 function getMessages(conv){if(conv.chat_messages)return conv.chat_messages;if(conv.mapping)return Object.values(conv.mapping).filter(n=>n.message&&n.message.content).sort((a,b)=>(a.message.create_time||0)-(b.message.create_time||0)).map(n=>n.message);return conv.messages||[];}
 function getMessageText(msg){if(!msg)return '';if(typeof msg.text==='string')return msg.text;if(typeof msg.content==='string')return msg.content;if(Array.isArray(msg.content))return msg.content.map(c=>typeof c==='string'?c:(c.text||c.content||'')).join('');if(msg.content&&msg.content.parts)return msg.content.parts.join('');return '';}
 function getRole(msg){const r=msg.role||msg.sender||'';return(r==='human'||r==='user')?'human':'assistant';}
 function formatDate(ts){if(!ts)return '';const d=new Date(typeof ts==='number'&&ts<1e12?ts*1000:ts);return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});}
-function renderCvList(conversations){const list=document.getElementById('cv-list');document.getElementById('cv-stats').textContent=conversations.length+' of '+allConversations.length+' conversations';if(!conversations.length){list.innerHTML='<div class="cv-empty">No conversations found</div>';return;}list.innerHTML=conversations.map(conv=>{const title=getTitle(conv),msgs=getMessages(conv),ts=formatDate(conv.updated_at||conv.create_time);const msgCount=msgs.filter(m=>m).length,isActive=(conv.uuid||conv.id)===activeConvId;const id=conv.uuid||conv.id||'',ht=cvSearchTerm?highlightText(title,cvSearchTerm):escHtml(title);return '<div class="cv-item'+(isActive?' active':'')+'" onclick="openConversation(\''+id+'\')"><div class="cv-item-title">'+ht+'</div><div class="cv-item-meta">'+ts+(msgCount?' · '+msgCount+' msgs':'')+'</div></div>';}).join('');}
+function renderCvList(conversations){const list=document.getElementById('cv-list');document.getElementById('cv-stats').textContent=conversations.length+' of '+allConversations.length+' conversations';if(!conversations.length){list.innerHTML='<div class="cv-empty">No conversations found</div>';return;}list.innerHTML=conversations.map(conv=>{const title=cvDisplayTitle(conv),msgs=getMessages(conv),ts=formatDate(conv.updated_at||conv.create_time);const msgCount=msgs.filter(m=>m).length,isActive=(conv.uuid||conv.id)===activeConvId;const id=conv.uuid||conv.id||'',ht=cvSearchTerm?highlightText(title,cvSearchTerm):escHtml(title);return '<div class="cv-item'+(isActive?' active':'')+'" onclick="openConversation(\''+id+'\')"><div class="cv-item-title">'+ht+'</div><div class="cv-item-meta">'+ts+(msgCount?' · '+msgCount+' msgs':'')+'</div></div>';}).join('');}
 function highlightText(text,term){const esc=escHtml(text);if(!term)return esc;return esc.replace(new RegExp('('+term.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi'),'<span class="highlight">$1</span>');}
-function openConversation(id){const conv=allConversations.find(c=>(c.uuid||c.id)===id);if(!conv)return;activeConvId=id;closeCvSidebar();const term=cvSearchTerm;renderCvList(allConversations.filter(c=>getTitle(c).toLowerCase().includes(term)||searchInMessages(c,term)));const title=getTitle(conv),msgs=getMessages(conv),ts=formatDate(conv.updated_at||conv.create_time);document.getElementById('cv-topbar').style.display='flex';document.getElementById('cv-conv-title').textContent=title;document.getElementById('cv-conv-meta').textContent=ts+' · '+msgs.length+' msgs';const container=document.getElementById('cv-messages');if(!msgs.length){container.innerHTML='<div class="cv-welcome"><div class="cv-welcome-icon">📭</div><h2>No messages</h2></div>';return;}container.innerHTML=msgs.filter(m=>m&&getMessageText(m)).map(msg=>{const role=getRole(msg),text=getMessageText(msg),formatted=formatMsgText(text);return '<div class="msg-bubble msg-'+role+'"><div class="msg-role">'+(role==='human'?'👤 YOU':'🤖 CLAUDE')+'</div><div class="msg-text">'+formatted+'</div></div>';}).join('');container.scrollTop=0;}
+function cvGetConvId(conv){return conv.uuid||conv.id||'';}
+function cvGetEdits(convId){if(!cvEdits[convId])cvEdits[convId]={title:null,msgText:{},deleted:{}};return cvEdits[convId];}
+function cvDisplayTitle(conv){const id=cvGetConvId(conv);const e=cvEdits[id];return(e&&e.title)?e.title:getTitle(conv);}
+
+function openConversation(id){
+  const conv=allConversations.find(c=>cvGetConvId(c)===id);if(!conv)return;
+  activeConvId=id;cvEditingMsgIdx=null;closeCvSidebar();
+  const term=cvSearchTerm;
+  renderCvList(allConversations.filter(c=>cvDisplayTitle(c).toLowerCase().includes(term)||searchInMessages(c,term)));
+  const ts=formatDate(conv.updated_at||conv.create_time);
+  document.getElementById('cv-topbar').style.display='flex';
+  document.getElementById('cv-conv-title').textContent=cvDisplayTitle(conv);
+  document.getElementById('cv-conv-meta').textContent=ts+' · '+getMessages(conv).length+' msgs';
+  cvRenderMessages();
+}
+
+function cvRenderMessages(){
+  const conv=allConversations.find(c=>cvGetConvId(c)===activeConvId);
+  const container=document.getElementById('cv-messages');
+  if(!conv||!container)return;
+  const edits=cvGetEdits(activeConvId);
+  const msgs=getMessages(conv);
+  const visible=msgs.map((m,idx)=>({m,idx})).filter(x=>x.m&&getMessageText(x.m)&&!edits.deleted[x.idx]);
+  if(!visible.length){
+    container.innerHTML='<div class="cv-welcome"><div class="cv-welcome-icon">📭</div><h2>No messages</h2></div>';
+    return;
+  }
+  container.innerHTML=visible.map(({m,idx})=>{
+    const role=getRole(m);
+    const rawText=(edits.msgText[idx]!==undefined)?edits.msgText[idx]:getMessageText(m);
+    const roleLabel=(role==='human'?'👤 YOU':'🤖 CLAUDE');
+    if(cvEditingMsgIdx===idx){
+      return '<div class="msg-bubble msg-'+role+'" data-idx="'+idx+'">'
+        +'<div class="msg-bubble-head"><div class="msg-role">'+roleLabel+'</div></div>'
+        +'<textarea class="cv-msg-edit-area" id="cv-edit-ta-'+idx+'" oninput="cvAutoGrow(this)">'+escHtml(rawText)+'</textarea>'
+        +'<div class="cv-msg-edit-actions"><button class="cv-icon-btn" onclick="cvSaveMsgEdit('+idx+')">✓ Save</button><button class="cv-icon-btn" onclick="cvCancelMsgEdit()">✕ Cancel</button></div>'
+        +'</div>';
+    }
+    const formatted=formatMsgText(rawText);
+    return '<div class="msg-bubble msg-'+role+'" data-idx="'+idx+'">'
+      +'<div class="msg-bubble-head"><div class="msg-role">'+roleLabel+'</div><button class="msg-del-btn" title="Delete message" onclick="cvDeleteMessage('+idx+')">🗑️</button></div>'
+      +'<div class="msg-text" onclick="cvStartMsgEdit('+idx+')">'+formatted+'</div>'
+      +'</div>';
+  }).join('');
+}
+
+function cvStartMsgEdit(idx){
+  cvEditingMsgIdx=idx;
+  cvRenderMessages();
+  const ta=document.getElementById('cv-edit-ta-'+idx);
+  if(ta){ta.focus();cvAutoGrow(ta);}
+}
+function cvAutoGrow(ta){ta.style.height='auto';ta.style.height=(ta.scrollHeight+4)+'px';}
+function cvSaveMsgEdit(idx){
+  const ta=document.getElementById('cv-edit-ta-'+idx);if(!ta)return;
+  const edits=cvGetEdits(activeConvId);
+  edits.msgText[idx]=ta.value;
+  cvEditingMsgIdx=null;
+  cvRenderMessages();
+  showToast('Message update হয়েছে');
+}
+function cvCancelMsgEdit(){cvEditingMsgIdx=null;cvRenderMessages();}
+function cvDeleteMessage(idx){
+  if(!confirm('এই message মুছে ফেলবো?'))return;
+  const edits=cvGetEdits(activeConvId);
+  edits.deleted[idx]=true;
+  if(cvEditingMsgIdx===idx)cvEditingMsgIdx=null;
+  cvRenderMessages();
+  showToast('Message delete হয়েছে');
+}
+
+function cvRenameTitle(){
+  const conv=allConversations.find(c=>cvGetConvId(c)===activeConvId);if(!conv)return;
+  const edits=cvGetEdits(activeConvId);
+  const current=edits.title||getTitle(conv);
+  const newTitle=prompt('নতুন title লিখো:',current);
+  if(newTitle===null)return;
+  edits.title=newTitle.trim();
+  document.getElementById('cv-conv-title').textContent=edits.title||'Untitled';
+  const term=cvSearchTerm;
+  renderCvList(allConversations.filter(c=>cvDisplayTitle(c).toLowerCase().includes(term)||searchInMessages(c,term)));
+  showToast('Title update হয়েছে');
+}
+
+function cvDownload(format){
+  const conv=allConversations.find(c=>cvGetConvId(c)===activeConvId);
+  if(!conv){showToast('আগে একটা conversation খোলো');return;}
+  const edits=cvGetEdits(activeConvId);
+  const title=cvDisplayTitle(conv);
+  const msgs=getMessages(conv);
+  const visible=msgs.map((m,idx)=>({m,idx})).filter(x=>x.m&&getMessageText(x.m)&&!edits.deleted[x.idx]);
+  const exportMsgs=visible.map(({m,idx})=>({role:getRole(m),text:(edits.msgText[idx]!==undefined)?edits.msgText[idx]:getMessageText(m)}));
+  const safeName=(title||'conversation').replace(/[\\/:*?"<>|]/g,'_');
+  let blob,filename;
+  if(format==='json'){
+    blob=new Blob([JSON.stringify({title,messages:exportMsgs},null,2)],{type:'application/json;charset=utf-8'});
+    filename=safeName+'.json';
+  }else{
+    const body=exportMsgs.map(m=>(m.role==='human'?'YOU':'CLAUDE')+':\n'+m.text).join('\n\n');
+    blob=new Blob(['# '+title+'\n\n'+body],{type:'text/plain;charset=utf-8'});
+    filename=safeName+'.txt';
+  }
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download=filename;a.click();
+  URL.revokeObjectURL(url);
+  showToast('Downloaded: '+filename);
+}
 function formatMsgText(text){let html=escHtml(text);html=html.replace(/```[\s\S]*?```/g,m=>'<pre>'+m.slice(3,-3).replace(/^[^\n]*\n/,'')+'</pre>');html=html.replace(/`([^`]+)`/g,'<code>$1</code>');html=html.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');html=html.replace(/\n/g,'<br>');return html;}
 function escHtml(str){return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
@@ -803,6 +1033,312 @@ document.addEventListener('click',function(e){
   if(menu&&menu.style.display==='block'&&!menu.contains(e.target))hideNoteCtxMenu();
 });
 
+// ── KROMO ──
+const KR_STORAGE_KEY = 'kromo_boxes_v1';
+let krBoxes = [];
+let krDraft = null;
+let krEditBuffers = {};
+let krEditingIds = new Set();
+let krOpenMenuId = null;
+let krConfirmDeleteId = null;
+
+function krLoadBoxes(){
+  try{
+    const raw = localStorage.getItem(KR_STORAGE_KEY);
+    krBoxes = raw ? JSON.parse(raw) : [];
+  }catch(e){ krBoxes = []; }
+}
+function krPersist(){
+  try{ localStorage.setItem(KR_STORAGE_KEY, JSON.stringify(krBoxes)); }catch(e){}
+}
+
+function krBnNum(n){
+  const map = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+  return String(n).split('').map(ch => /[0-9]/.test(ch) ? map[ch] : ch).join('');
+}
+
+function krEscapeHtml(str){
+  return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function krGenId(){
+  return 'b' + Date.now().toString(36) + Math.random().toString(36).slice(2,7);
+}
+
+function krCopyText(text){
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(()=>showToast('Copied ✓')).catch(()=>krFallbackCopy(text));
+  } else {
+    krFallbackCopy(text);
+  }
+}
+function krFallbackCopy(text){
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position='fixed'; ta.style.opacity='0';
+  document.body.appendChild(ta);
+  ta.focus(); ta.select();
+  try{ document.execCommand('copy'); showToast('Copied ✓'); }catch(e){ showToast('Could not copy'); }
+  document.body.removeChild(ta);
+}
+
+function krParseItems(text){
+  return text.split('\n').map(l=>l.trim()).filter(l=>l.length>0);
+}
+
+function krSortedBoxes(){
+  return [...krBoxes].sort((a,b)=> (b.pinned?1:0) - (a.pinned?1:0));
+}
+
+function krRender(){
+  const root = document.getElementById('kr-app');
+  if(!root) return;
+  let html = '';
+
+  const list = krSortedBoxes();
+
+  if(list.length === 0 && !krDraft){
+    html += `
+      <div class="kr-empty-state">
+        <button class="kr-add-fab" data-action="add-draft">+</button>
+        <p class="kr-empty-text">এখনো কোনো list নেই<br>+ চাপো শুরু করতে</p>
+      </div>`;
+  } else {
+    for(const box of list){
+      if(krEditingIds.has(box.id)){
+        html += krRenderEditCard(box.id, krEditBuffers[box.id].title, krEditBuffers[box.id].text);
+      } else {
+        html += krRenderViewCard(box);
+      }
+    }
+    if(krDraft){
+      html += krRenderEditCard(krDraft.id, krDraft.title, krDraft.text);
+    }
+    if(!krDraft){
+      html += `<button class="kr-add-card-btn" data-action="add-draft">+ নতুন List যোগ করো</button>`;
+    }
+  }
+
+  root.innerHTML = html;
+  krAttachInputHandlers();
+}
+
+function krRenderEditCard(id, title, text){
+  return `
+    <div class="kr-card" data-id="${id}">
+      <input type="text" class="kr-title-input" data-field="title" placeholder="List-এর নাম (যেমন: Office numbers)" value="${krEscapeHtml(title)}">
+      <textarea class="kr-items-input" data-field="text" placeholder="প্রতি লাইনে একটা করে item লেখো বা paste করো
+
+e.g.
+01711xxxxxx
+01812xxxxxx
+example@mail.com">${krEscapeHtml(text)}</textarea>
+      <div class="kr-edit-actions">
+        <button class="kr-btn kr-btn-ghost" data-action="cancel">Cancel</button>
+        <button class="kr-btn kr-btn-primary" data-action="save">Save</button>
+      </div>
+    </div>`;
+}
+
+function krRenderViewCard(box){
+  const total = box.items.length;
+  const idx = Math.min(box.currentIndex || 0, total - 1);
+  const isLast = idx >= total - 1;
+  const currentItem = box.items[idx] || '';
+  const menuOpen = krOpenMenuId === box.id;
+  const confirming = krConfirmDeleteId === box.id;
+
+  let menuHtml = '';
+  if(menuOpen){
+    if(confirming){
+      menuHtml = `
+        <div class="kr-menu">
+          <p class="kr-menu-confirm-text">এই list মুছে ফেলবো?</p>
+          <button class="kr-menu-item kr-menu-danger" data-action="confirm-delete">হ্যাঁ, Delete করো</button>
+          <button class="kr-menu-item" data-action="cancel-delete">না, থাক</button>
+        </div>`;
+    } else {
+      menuHtml = `
+        <div class="kr-menu">
+          <button class="kr-menu-item" data-action="edit">✏️ Edit</button>
+          <button class="kr-menu-item" data-action="pin">📌 ${box.pinned ? 'Unpin' : 'Pin'}</button>
+          <button class="kr-menu-item kr-menu-danger" data-action="delete">🗑️ Delete</button>
+        </div>`;
+    }
+  }
+
+  return `
+    <div class="kr-card" data-id="${box.id}">
+      <div class="kr-card-head">
+        ${box.pinned ? '<span class="kr-pin-badge">📌</span>' : ''}
+        <h3 class="kr-card-title">${krEscapeHtml(box.title) || 'Untitled'}</h3>
+        <button class="kr-gear-btn" data-action="menu">⚙️</button>
+        ${menuHtml}
+      </div>
+      <div class="kr-counter-panel">
+        <span class="kr-counter-num">${krBnNum(idx+1)}</span><span class="kr-counter-sep">/</span><span class="kr-counter-total">${krBnNum(total)}</span>
+        ${isLast ? `<button class="kr-restart-btn" data-action="restart" title="শুরু থেকে আবার">⟲</button>` : ''}
+      </div>
+      <button class="kr-item-display" data-action="copy">
+        <span class="kr-item-text">${krEscapeHtml(currentItem)}</span>
+        <span class="kr-copy-hint">কপি করতে Tap করো</span>
+      </button>
+      <button class="kr-btn kr-btn-next" data-action="next" ${isLast ? 'disabled' : ''}>${isLast ? 'Finished' : 'Next  →'}</button>
+    </div>`;
+}
+
+function krAttachInputHandlers(){
+  document.querySelectorAll('#kr-app [data-field]').forEach(el=>{
+    el.addEventListener('input', (e)=>{
+      const card = e.target.closest('.kr-card');
+      const id = card.dataset.id;
+      const field = e.target.dataset.field;
+      if(krDraft && krDraft.id === id){
+        krDraft[field] = e.target.value;
+      } else if(krEditBuffers[id]){
+        krEditBuffers[id][field] = e.target.value;
+      }
+    });
+  });
+}
+
+function krWireKromoEvents(){
+  const root = document.getElementById('kr-app');
+  if(!root) return;
+  root.addEventListener('click', (e)=>{
+    const actionEl = e.target.closest('[data-action]');
+    if(!actionEl) return;
+    e.stopPropagation();
+    const action = actionEl.dataset.action;
+    const card = actionEl.closest('.kr-card');
+    const id = card ? card.dataset.id : null;
+
+    if(action === 'add-draft'){
+      krDraft = { id: krGenId(), title: '', text: '' };
+      krRender();
+      return;
+    }
+
+    if(action === 'cancel'){
+      if(krDraft && krDraft.id === id){
+        krDraft = null;
+      } else {
+        krEditingIds.delete(id);
+        delete krEditBuffers[id];
+      }
+      krRender();
+      return;
+    }
+
+    if(action === 'save'){
+      let title, text;
+      if(krDraft && krDraft.id === id){ title = krDraft.title; text = krDraft.text; }
+      else { title = krEditBuffers[id].title; text = krEditBuffers[id].text; }
+
+      const items = krParseItems(text);
+      if(items.length === 0){
+        showToast('অন্তত একটা লাইন দাও');
+        return;
+      }
+
+      if(krDraft && krDraft.id === id){
+        krBoxes.push({ id, title: title.trim(), items, currentIndex: 0, pinned: false });
+        krDraft = null;
+      } else {
+        const box = krBoxes.find(b=>b.id===id);
+        box.title = title.trim();
+        box.items = items;
+        box.currentIndex = 0;
+        krEditingIds.delete(id);
+        delete krEditBuffers[id];
+      }
+      krPersist();
+      krRender();
+      return;
+    }
+
+    if(action === 'menu'){
+      krOpenMenuId = (krOpenMenuId === id) ? null : id;
+      krConfirmDeleteId = null;
+      krRender();
+      return;
+    }
+
+    if(action === 'edit'){
+      const box = krBoxes.find(b=>b.id===id);
+      krEditBuffers[id] = { title: box.title, text: box.items.join('\n') };
+      krEditingIds.add(id);
+      krOpenMenuId = null;
+      krRender();
+      return;
+    }
+
+    if(action === 'pin'){
+      const box = krBoxes.find(b=>b.id===id);
+      box.pinned = !box.pinned;
+      krOpenMenuId = null;
+      krPersist();
+      krRender();
+      return;
+    }
+
+    if(action === 'delete'){
+      krConfirmDeleteId = id;
+      krRender();
+      return;
+    }
+
+    if(action === 'cancel-delete'){
+      krConfirmDeleteId = null;
+      krRender();
+      return;
+    }
+
+    if(action === 'confirm-delete'){
+      krBoxes = krBoxes.filter(b=>b.id!==id);
+      krOpenMenuId = null;
+      krConfirmDeleteId = null;
+      krPersist();
+      krRender();
+      return;
+    }
+
+    if(action === 'next'){
+      const box = krBoxes.find(b=>b.id===id);
+      if(box.currentIndex < box.items.length - 1){
+        box.currentIndex++;
+        krPersist();
+        krRender();
+      }
+      return;
+    }
+
+    if(action === 'restart'){
+      const box = krBoxes.find(b=>b.id===id);
+      box.currentIndex = 0;
+      krPersist();
+      krRender();
+      return;
+    }
+
+    if(action === 'copy'){
+      const box = krBoxes.find(b=>b.id===id);
+      const idx = Math.min(box.currentIndex||0, box.items.length-1);
+      krCopyText(box.items[idx]);
+      return;
+    }
+  });
+}
+krWireKromoEvents();
+
+document.addEventListener('click', (e)=>{
+  if(krOpenMenuId && !e.target.closest('.kr-menu') && !e.target.closest('.kr-gear-btn')){
+    krOpenMenuId = null;
+    krConfirmDeleteId = null;
+    krRender();
+  }
+});
+
 // ── TOAST ──
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
 
@@ -810,6 +1346,8 @@ function showToast(msg){const t=document.getElementById('toast');t.textContent=m
 loadNotesFromStorage();
 updateLineNumbers();
 onFormatChange();
+krLoadBoxes();
+krRender();
 </script>
 </body>
-</html>
+ </html>
